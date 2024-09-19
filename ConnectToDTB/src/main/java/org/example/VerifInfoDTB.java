@@ -1,6 +1,5 @@
 package org.example;
 
-import com.mysql.cj.jdbc.ClientPreparedStatement;
 
 import java.sql.*;
 
