@@ -6,33 +6,40 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.Image?>
 <VBox alignment="CENTER" prefHeight="306.0" prefWidth="370.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.authuserfx.ConnectionController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
+   <HBox alignment="CENTER_RIGHT" prefHeight="61.0" prefWidth="330.0">
+      <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+         <Image url="@img/logo.png"/>
+      </ImageView>
+   </HBox>
    <VBox alignment="CENTER_LEFT" prefHeight="134.0" prefWidth="355.0" spacing="20.0">
       <padding>
-         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       </padding>
       <HBox prefHeight="0.0" prefWidth="200.0">
-         <Label text="Nom: "/>
-         <TextField fx:id="txtNom"/>
+         <Label text="Nom: " />
+         <TextField fx:id="txtNom" />
       </HBox>
       <HBox prefHeight="0.0" prefWidth="200.0">
-         <Label text="Password: "/>
-         <PasswordField fx:id="txtPassword"/>
+         <Label text="Password: " />
+         <PasswordField fx:id="txtPassword" />
       </HBox>
    </VBox>
    <HBox alignment="CENTER" prefHeight="34.0" prefWidth="355.0">
-      <Button fx:id="btnConnect" alignment="CENTER" mnemonicParsing="false" onAction="#Connection" text="Se connecter"/>
-      <Button fx:id="btnCancel" mnemonicParsing="false" text="Annuler Saisie"/>
-      <Button fx:id="btnSignup" alignment="CENTER" mnemonicParsing="false" onAction="#signUp" text="S'inscrire"/>
-      <Button fx:id="btnRegister" alignment="CENTER" mnemonicParsing="false" onAction="#signUp" text="Valider saisie"/>
+      <Button fx:id="btnConnect" alignment="CENTER" mnemonicParsing="false" onAction="#Connection" text="Se connecter" />
+      <Button fx:id="btnCancel" mnemonicParsing="false" text="Annuler Saisie" />
+      <Button fx:id="btnSignup" alignment="CENTER" mnemonicParsing="false" onAction="#signUp" text="S'inscrire" />
+      <Button fx:id="btnRegister" alignment="CENTER" mnemonicParsing="false" onAction="#signUp" text="Valider saisie" />
    </HBox>
    <VBox prefHeight="100.0" prefWidth="200.0">
-      <TextArea fx:id="txtAreaErrors" disable="true" prefHeight="200.0" prefWidth="200.0"/>
+      <TextArea fx:id="txtAreaErrors" disable="true" prefHeight="200.0" prefWidth="200.0" />
    </VBox>
 </VBox>
