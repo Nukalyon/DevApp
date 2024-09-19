@@ -18,6 +18,9 @@ public class RegisterErrors
     private static final String USER_ADDED = "l'utilisateur à été ajouté à la bdd";
     private static final String USER_NOT_ADDED = "l'utilisateur n'à pas été ajouté à la bdd";
 
+    /**
+     * Initialise le codex des erreurs pour faciliter l'affichage
+     */
     //Region Singleton
     public RegisterErrors()
     {
@@ -28,6 +31,9 @@ public class RegisterErrors
         errorCodex.put(4, USER_NOT_ADDED);
     }
 
+    /** Singleton
+     * @return instance de RegisterErrors
+     */
     public static RegisterErrors getInstance()
     {
         if(RegisterErrors.instance == null)
@@ -38,16 +44,25 @@ public class RegisterErrors
     }
     //Fin région Singleton
 
+    /**
+     * @param code numéro associé au message d'erreur, retrouvable dans le constructeur RegisterErrors()
+     */
     public void addMessage(int code)
     {
         debug.add(errorCodex.get(code));
     }
 
+    /**
+     * Efface les précédentes erreures enregistrées
+     */
     public void reset()
     {
         debug.clear();
     }
 
+    /**
+     * @param target textArea où sera affiché les messages d'erreurs
+     */
     public void displayErrors(TextArea target)
     {
         StringBuilder strb = new StringBuilder();

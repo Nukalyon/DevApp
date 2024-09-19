@@ -10,8 +10,10 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        //Charge l'affichage
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        //Evite qui l'utilisateur ne peut modifier la taille de la fenêtre
         stage.setResizable(false);
         stage.setTitle("Authentification and Registration db");
         stage.setScene(scene);

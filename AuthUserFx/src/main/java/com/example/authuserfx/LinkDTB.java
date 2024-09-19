@@ -1,9 +1,5 @@
 package com.example.authuserfx;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.layout.Region;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +8,11 @@ import java.sql.SQLException;
 public class LinkDTB {
 
 
+    /**
+     * @param username Nom de l'utilisateur à tester
+     * @param password Mot de passe à tester
+     * @return true si présent dans la bdd, faux sinon
+     */
     public static boolean authentification(String username, String password)
     {
         boolean res = true;
@@ -38,6 +39,11 @@ public class LinkDTB {
         return res;
     }
 
+    /**
+     * @param username Nom d'utilisateur à ajouter
+     * @param password Mot de passe qui sera associé au 'username'
+     * @return true si l'inscription est réussie, faux sinon
+     */
     public static boolean register(String username, String password) {
         boolean res = true;
         try (Connection con = ConnexionDTB.getConnection())

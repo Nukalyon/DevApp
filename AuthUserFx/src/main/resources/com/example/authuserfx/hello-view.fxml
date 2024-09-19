@@ -20,13 +20,13 @@
       <children>
          <HBox prefHeight="0.0" prefWidth="200.0">
             <children>
-                <Label fx:id="nText" text="Nom: " />
+                <Label text="Nom: " />
                <TextField fx:id="txtNom" />
             </children>
          </HBox>
          <HBox prefHeight="0.0" prefWidth="200.0">
             <children>
-               <Label fx:id="pText" text="Password: " />
+               <Label text="Password: " />
                <PasswordField fx:id="txtPassword" />
             </children>
          </HBox>
@@ -34,7 +34,7 @@
    </VBox>
    <HBox alignment="CENTER" prefHeight="34.0" prefWidth="355.0">
       <children>
-         <Button fx:id="btnConnect" alignment="CENTER" mnemonicParsing="false" onAction="#isConnectable" text="Se connecter" />
+         <Button fx:id="btnConnect" alignment="CENTER" mnemonicParsing="false" onAction="#Connection" text="Se connecter" />
          <Button fx:id="btnCancel" mnemonicParsing="false" text="Annuler Saisie" />
          <Button fx:id="btnSignup" alignment="CENTER" mnemonicParsing="false" onAction="#signUp" text="S'inscrire" />
          <Button fx:id="btnRegister" alignment="CENTER" mnemonicParsing="false" onAction="#signUp" text="Valider saisie" />

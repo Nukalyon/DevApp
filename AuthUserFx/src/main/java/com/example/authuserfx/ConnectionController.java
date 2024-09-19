@@ -31,7 +31,10 @@ public class ConnectionController implements Initializable
     @FXML
     TextField txtPassword;
 
-    public void isConnectable()
+    /** Fonction qui va tester la validité des champs de saisies
+     * et affichera si la connection est réussie ou non
+     */
+    public void Connection()
     {
         if(CheckUsername() && CheckPassword())
         {
@@ -47,6 +50,9 @@ public class ConnectionController implements Initializable
         }
     }
 
+    /**
+     * @return true si le mot de passe entré respecte certains critères, faux sinon
+     */
     private boolean CheckPassword() {
         boolean res = true;
         if(txtPassword != null)
@@ -76,6 +82,9 @@ public class ConnectionController implements Initializable
         return res;
     }
 
+    /**
+     * @return true si le nom d'utilisateur entré respecte certains critères, faux sinon
+     */
     private boolean CheckUsername() {
         boolean res = true;
         if(txtNom != null)
@@ -113,6 +122,9 @@ public class ConnectionController implements Initializable
         return res;
     }
 
+    /**
+     * Fonction qui permet de modifier l'affichage pour faciliter une inscription d'un nouvel usager
+     */
     public void signUp() {
         hideButtons(true);
         clearFields();
@@ -138,11 +150,17 @@ public class ConnectionController implements Initializable
         });
     }
 
+    /**
+     * Fonction qui efface les champs de saisies
+     */
     private void clearFields() {
         txtNom.clear();
         txtPassword.clear();
     }
 
+    /**
+     * @param b true pour afficher, false pour cacher certains boutons
+     */
     private void hideButtons(boolean b) {
         btnConnect.setVisible(!b);
         btnSignup.setVisible(!b);
@@ -150,6 +168,10 @@ public class ConnectionController implements Initializable
         btnCancel.setVisible(b);
     }
 
+    /** Fonction qui permet d'initialiser l'affichage au lancement, cache des boutons
+     * @param url initialiseur
+     * @param resourceBundle initialiseur
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btnRegister.setVisible(false);
