@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="460.0" prefWidth="406.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="com.example.gestionpersonne.PersonneController">
+    <padding>
+        <Insets left="20" right="20" top="20" />
+    </padding>
+    <TextField fx:id="txtFieldName" />
+    <TextField fx:id="txtFieldAge" />
+    <TextField fx:id="txtFieldMail" />
+    <Button onAction="#registerTxt" text="Enregistrer dans Fichier Texte" />
+    <Button onAction="#registerBin" text="Enregistrer dans Fichier Binaire" />
+    <Button onAction="#serialize" text="Sérialiser Objet" />
+    <TextField disable="true" prefHeight="128.0" prefWidth="384.0" />
+</VBox>
