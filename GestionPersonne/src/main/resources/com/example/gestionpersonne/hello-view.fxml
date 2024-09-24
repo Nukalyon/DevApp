@@ -15,5 +15,5 @@
     <Button onAction="#registerTxt" text="Enregistrer dans Fichier Texte" />
     <Button onAction="#registerBin" text="Enregistrer dans Fichier Binaire" />
     <Button onAction="#serialize" text="Sérialiser Objet" />
-    <TextField disable="true" prefHeight="128.0" prefWidth="384.0" />
+    <TextField fx:id="txtFieldLog" disable="true" prefHeight="128.0" prefWidth="384.0" />
 </VBox>
