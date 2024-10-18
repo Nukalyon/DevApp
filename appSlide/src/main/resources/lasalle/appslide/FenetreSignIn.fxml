@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="290.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lasalle.appslide.FenetreSignInController">
+   <children>
+      <Button fx:id="btn_signing" layoutX="194.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleSignIn" text="S'inscrire" />
+      <Text layoutX="26.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mot de passe" />
+      <TextField fx:id="txtField_username" layoutX="26.0" layoutY="65.0" promptText="Entrez votre nom" />
+      <TextField fx:id="txtField_password" layoutX="26.0" layoutY="149.0" promptText="Entrer votre mot de passe" />
+      <Text layoutX="26.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom" />
+   </children>
+</AnchorPane>

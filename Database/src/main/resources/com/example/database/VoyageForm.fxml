@@ -44,4 +44,5 @@
 
     <Button fx:id="btnReserver" onAction="#reserver" text="Réserver" />
    <Label fx:id="lblReservation" />
+   <Button fx:id="btnPaiement" mnemonicParsing="false" text="Paiement" onAction="#paiementTransaction"/>
 </VBox>

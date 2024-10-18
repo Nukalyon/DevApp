@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="App Voyage JavaMySql">
+    <output-path>$PROJECT_DIR$/out/artifacts/App_Voyage_JavaMySql</output-path>
+    <root id="archive" name="App Voyage JavaMySql.jar" />
+  </artifact>
+</component>

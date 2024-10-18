@@ -1,0 +1,4 @@
+Destination: FRANCE
+Activité: Plongee
+Nombre de jours: 1
+Prix total: 1421.98

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lasalle.appslide.FenetrePaiementController">
+        <Label fx:id="labelNomUsager" layoutX="34.0" layoutY="54.0" text="Nom de l'usager : " />
+        <Label fx:id="labelDestination" layoutX="33.0" layoutY="72.0" text="Destination : " />
+        <Label fx:id="labelNombreJours" layoutX="33.0" layoutY="90.0" text="Nombre de jours : " />
+        <Label fx:id="labelPrixTotal" layoutX="33.0" layoutY="114.0" text="Prix total : " />
+
+    <!-- Champ pour entrer le numéro de carte de crédit -->
+    <TextField fx:id="cardNumberField" layoutX="33.0" layoutY="200.0" promptText="Numéro de carte" />
+    <Label fx:id="labelAvoirRestant" layoutX="30.0" layoutY="329.0" text="Avoir restant : " />
+
+
+    <!-- Bouton pour confirmer le paiement -->
+    <Button fx:id="confirmerpaiement" layoutX="33.0" layoutY="274.0" onAction="#confirmerPaiement" text="Confirmer le paiement" />
+
+    <Label fx:id="afficherAvoirRestant" layoutX="33.0" layoutY="300.0" text="" />
+
+    <Button fx:id="closeInterface" layoutX="411.0" layoutY="347.0" onAction="#closeInterface" text="Fermer Interface courante" />
+   <Label layoutX="33.0" layoutY="170.0" text="#carte crédit" />
+   <Text fill="#ae2424" layoutX="168.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Interface Java MySql Paiement">
+      <font>
+         <Font name="Bell MT Bold" size="24.0" />
+      </font>
+   </Text>
+   <Label layoutX="296.0" layoutY="81.0" text="Destinations" />
+   <Label layoutX="439.0" layoutY="82.0" text="Activites" />
+   <Label fx:id="lbl_destinations" layoutX="296.0" layoutY="123.0" text="temp" />
+   <Label fx:id="lbl_activities" layoutX="433.0" layoutY="123.0" text="temp" />
+
+</AnchorPane>

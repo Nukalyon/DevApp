@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,12 +37,15 @@ public class VoyageController {
     private TextField txtFieldPassword;
     @FXML
     private Button btnReserver;
+    @FXML
+    private Button btnPaiement;
 
     private double total;
 
     @FXML
     public void initialize() {
         btnReserver.setVisible(false);
+        btnPaiement.setVisible(false);
     }
 
     public void init() {
@@ -110,6 +114,7 @@ public class VoyageController {
                 " et " + cbActivities.getValue().getNom() +
                 "\nTotal: " + total + "$"
         );
+        btnPaiement.setVisible(true);
     }
 
     public void connecter(ActionEvent ignoredActionEvent) {
@@ -198,6 +203,113 @@ public class VoyageController {
             RegisterErrors.getInstance().addMessage(1);
         }
 
+        return res;
+    }
+
+    public void paiementTransaction(ActionEvent ignoredActionEvent) {
+        String insertion =  "INSERT INTO paiement (utilisateur_id,destination_id,activite_id,montant, authorized) " +
+                            "VALUES (?,?,?,?,?)";
+        try(Connection con = DatabaseConnection.getConnection())
+        {
+            int util_id = GatherInformationInt("id", "users", txtFieldUsername.getText());
+            int dest_id = GatherInformationInt("id", "destination", cbDestinations.getValue().getNom());
+            int acti_id = GatherInformationInt("id", "activities", cbActivities.getValue().getNom());
+            double util_avoir = GatherInformationDouble("avoir", "users", txtFieldUsername.getText());
+            boolean isAuthorized = true;
+
+            if(util_id == -1 || dest_id == -1 || acti_id == -1 || util_avoir == -1)
+                throw new Exception("Une des requêtes n'a rien retourné....");
+            if(util_avoir < total)
+                isAuthorized = false;
+
+            //Début de l'insertion
+            PreparedStatement statement = con.prepareStatement(insertion);
+            statement.setInt(1, util_id);
+            statement.setInt(2, dest_id);
+            statement.setInt(3, acti_id);
+            statement.setDouble(4, util_avoir);
+            if(isAuthorized)
+            {
+                statement.setBoolean(5, true);
+            }
+            else {
+                statement.setBoolean(5, false);
+            }
+            int rs = statement.executeUpdate();
+            if(rs == 0) {
+                txtFieldLog.setText("Aucune ligne de changée...");
+            }
+            else {
+                txtFieldLog.setText("Succès !\n" + rs + " lignes de modifiée(s)");
+            }
+
+            if(isAuthorized)
+                UpdateAvoirUser(util_avoir-total);
+        }
+        catch (Exception e) {
+            txtFieldLog.setText(e.getMessage());
+        }
+    }
+
+    private void UpdateAvoirUser(double newAvoir) {
+        String update = "UPDATE users SET avoir=? WHERE nom=?";
+        try(Connection con = DatabaseConnection.getConnection())
+        {
+            PreparedStatement statement = con.prepareStatement(update);
+            statement.setString(1, String.valueOf(newAvoir));
+            statement.setString(2, txtFieldUsername.getText());
+            int rs = statement.executeUpdate();
+            if(rs == 0)
+            {
+                txtFieldLog.setText("Aucune ligne modifiée");
+            }
+            else {
+                txtFieldLog.setText("1 ligne modifiée");
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private double GatherInformationDouble(String id, String dtb, String condition) {
+        String requete = "SELECT "+ id + " FROM "+ dtb + " WHERE nom=?";
+        double res = -1;
+        try(Connection con = DatabaseConnection.getConnection())
+        {
+            PreparedStatement statement = con.prepareStatement(requete);
+            statement.setString(1, condition);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next())
+            {
+                res = Double.parseDouble(rs.getString(1));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+
+    private int GatherInformationInt(String id, String dtb, String condition) {
+        String requete = "SELECT "+ id + " FROM "+ dtb + " WHERE nom=?";
+        int res = -1;
+        try(Connection con = DatabaseConnection.getConnection())
+        {
+            PreparedStatement statement = con.prepareStatement(requete);
+            statement.setString(1, condition);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next())
+            {
+                res = Integer.parseInt(rs.getString(1));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
         return res;
     }
 }

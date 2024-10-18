@@ -6,7 +6,7 @@
   </component>
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="false" />
+    <value-preview-text-wrapping value="true" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
@@ -16,65 +16,8 @@
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69">
-      <console name="ConnectionToWamp" type="STANDARD" schema="voyage" session="Main"><![CDATA[use voyage;
-
-create table destinations
-(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    pays VARCHAR(255) NOT NULL,
-    prix DOUBLE NOT NULL
-);
-
-create table activites
-(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    activite VARCHAR(255) NOT NULL,
-    prix DOUBLE NOT NULL
-);
-
-create table dbusers
-(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nom VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    avoir DECIMAL(10,2) NOT NULL
-);
-
-create table paiement
-(
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    utilisateur_id INT NOT NULL,
-    destination_id INT NOT NULL,
-    activite_id  INT NOT NULL,
-    avoir DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (utilisateur_id) references dbusers(id),
-    FOREIGN KEY (destination_id) references destinations(id),
-    FOREIGN KEY (activite_id) references activites(id)
-);
-
-create table paiement
-(
-    user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    montant DECIMAL(10, 2) NOT NULL,
-    nom VARCHAR(255) NOT NULL,
-    prenom VARCHAR(255) NOT NULL,
-    numero_carte VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) references dbusers(id)
-);
--- Insertion de données
-insert into destinations(pays, prix) values 
-    ('FRANCE', 1230.99), 
-    ('JAPON', 2700.88), 
-    ('BRESIL', 1300.59);
-    
-insert into activites(activite, prix) values 
-    ('Plongee', 190.99), 
-    ('Zoo', 100), 
-    ('Zumba', 15);
-
-insert into dbusers(nom,password,avoir) values
-    ('Jeremy','jeremy', 10000.99);]]></console>
+    <connection id="02a15efe-c093-472a-acbe-614605dc22ae">
+      <console name="Voyage" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -84,17 +27,7 @@ insert into dbusers(nom,password,avoir) values
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" />
-  </component>
-  <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" dataset="voyage.destination" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" dataset="voyage.activities" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" dataset="voyage.paiement" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" dataset="voyage.users" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" dataset="userdb.users" active-filter-id="EMPTY_FILTER" />
-  </component>
-  <component name="DBNavigator.Project.ExecutionManager">
-    <retain-sticky-names value="false" />
+    <connection id="02a15efe-c093-472a-acbe-614605dc22ae" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -102,9 +35,9 @@ insert into dbusers(nom,password,avoir) values
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="8fc1877e-e424-4a6e-9f16-8ddfa99a5e69" active="true" signed="true">
+      <connection id="02a15efe-c093-472a-acbe-614605dc22ae" active="true" signed="true">
         <database>
-          <name value="ConnectionToWamp" />
+          <name value="Voyage" />
           <description value="" />
           <database-type value="MYSQL" />
           <config-type value="BASIC" />
@@ -591,9 +524,5 @@ insert into dbusers(nom,password,avoir) values
         </visibility-settings>
       </environment>
     </general-settings>
-  </component>
-  <component name="DBNavigator.Project.StatementExecutionManager">
-    <execution-variables />
-    <execution-variable-types />
   </component>
 </project>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="662.0" prefWidth="603.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lasalle.appslide.VoyageController">
+    <Label layoutX="110.0" layoutY="144.0" text="Nom:" />
+    <TextField fx:id="usernameField" layoutX="222.0" layoutY="140.0" promptText="Username" />
+
+    <Label layoutX="110.0" layoutY="193.0" text="Mot de Passe:" />
+    <PasswordField fx:id="passwd" layoutX="222.0" layoutY="189.0" promptText="*********" />
+
+    <Button fx:id="btlogin" layoutX="463.0" layoutY="189.0" mnemonicParsing="false" onAction="#seLoguer" text="Login" />
+   <Button fx:id="btn_signIn" layoutX="541.0" layoutY="189.0" mnemonicParsing="false" onAction="#enregistrer" text="Nouvelle Inscription" />
+
+    <Label layoutX="110.0" layoutY="264.0" text="Destination:" />
+    <ComboBox fx:id="cbDestinations" disable="true" layoutX="221.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="18.0" prefWidth="150.0" />
+
+    <Label layoutX="110.0" layoutY="304.0" text="Activité:" />
+    <ComboBox fx:id="cbActivites" disable="true" layoutX="221.0" layoutY="304.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="150.0" />
+
+    <Label layoutX="110.0" layoutY="369.0" text="Nombre de jours:" />
+    <Spinner fx:id="nombreJoursSpinner" layoutX="222.0" layoutY="364.0" prefHeight="4.0" prefWidth="130.0" />
+
+    <Label fx:id="lblTotal" layoutX="214.0" layoutY="484.0" text="Total: Voyage +Activités: 0$" />
+    <Button fx:id="btreserver" layoutX="110.0" layoutY="480.0" onAction="#reserver" text="Réserver" />
+
+    <Label fx:id="lblUsager" layoutX="276.0" layoutY="105.0" prefHeight="27.0" prefWidth="278.0" style="-fx-font-size: 18; -fx-text-fill: green;" text="" textFill="#b72121">
+      <font>
+         <Font name="System Bold" size="30.0" />
+      </font></Label>
+   <Label layoutX="287.0" layoutY="32.0" prefHeight="40.0" prefWidth="486.0" text="Applcation JAVA MYSQL " textFill="#cc1060" wrapText="true">
+      <font>
+         <Font name="Bell MT Bold" size="24.0" />
+      </font>
+   </Label>
+   <Button fx:id="paiementButton" layoutX="108.0" layoutY="527.0" mnemonicParsing="false" text="Paiement" />
+   <Button fx:id="btn_close" layoutX="509.0" layoutY="533.0" mnemonicParsing="false" onAction="#closeInterface" prefHeight="64.0" prefWidth="122.0" text="Fermer l'application" />
+   <TextArea fx:id="txtArea_Log" disable="true" layoutX="463.0" layoutY="263.0" prefHeight="243.0" prefWidth="278.0" wrapText="true" />
+
+</AnchorPane>
