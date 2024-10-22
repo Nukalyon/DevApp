@@ -110,7 +110,6 @@ insert into dbuser(username,password,avoir) values
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="59b22a20-8ad2-4018-addb-8d73c04056bf" object-ref="schemas/voyage/tables/paiement" />
       <object connection-id="59b22a20-8ad2-4018-addb-8d73c04056bf" object-ref="consoles/Connection" />
     </open-files>
   </component>
