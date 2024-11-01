@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"educ.lasalle.gestion","l":"educ.lasalle.gestion"}];updateSearchResults();

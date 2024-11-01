@@ -1,0 +1,64 @@
+/* Style de base pour la fenêtre principale */
+.root {
+    -fx-background-color: #f0f0f0; /* Couleur de fond gris clair */
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #007bff; /* Couleur de fond bleu */
+    -fx-text-fill: white; /* Couleur du texte blanc */
+    -fx-padding: 10px 20px; /* Espacement interne */
+    -fx-font-size: 14px; /* Taille de la police */
+    -fx-font-weight: bold; /* Gras */
+    -fx-background-radius: 5px; /* Coins arrondis */
+}
+
+.button:hover {
+    -fx-background-color: #0056b3; /* Couleur de fond bleu plus foncé au survol */
+}
+
+/* Style pour les champs de texte */
+.text-field {
+    -fx-padding: 10px; /* Espacement interne */
+    -fx-border-color: #cccccc; /* Couleur de la bordure */
+    -fx-border-radius: 5px; /* Coins arrondis */
+}
+
+/* Style pour les étiquettes */
+.label {
+    -fx-font-size: 16px; /* Taille de la police */
+    -fx-text-fill: black; /* Couleur du texte noir */
+}
+
+/* Style pour les tableaux */
+.table-view {
+    -fx-background-color: white; /* Couleur de fond blanc */
+    -fx-border-color: #cccccc; /* Couleur de la bordure */
+}
+
+
+.table-view .table-header {
+    -fx-background-color: #007bff; /* Couleur de fond bleu pour l'en-tête */
+    -fx-text-fill: white; /* Couleur du texte blanc */
+}
+
+/* Style pour les lignes de la table */
+.table-view .table-row-cell {
+    -fx-background-color: lightgray; /* Couleur de fond blanc */
+    /*-fx-border-color: black; /* Couleur de la bordure */
+}
+
+/* Style pour les lignes de la table  selectionnées*/
+.table-view .table-row-cell:selected{
+    -fx-background-color: lightgreen; /* Color for selected rows */
+    -fx-text-background-color : black;
+}
+
+/* Style pour les alertes */
+.alert {
+    -fx-background-color: #ffdddd; /* Couleur de fond rouge clair */
+    -fx-text-fill: #d8000c; /* Couleur du texte rouge foncé */
+    -fx-padding: 10px; /* Espacement interne */
+    -fx-border-color: #d8000c; /* Couleur de la bordure */
+    -fx-border-radius: 5px; /* Coins arrondis */
+}

@@ -109,9 +109,7 @@ insert into dbuser(username,password,avoir) values
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="59b22a20-8ad2-4018-addb-8d73c04056bf" object-ref="consoles/Connection" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="59b22a20-8ad2-4018-addb-8d73c04056bf" />

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="educ.lasalle.gestion.Controller">
+    <Label text="Gestion des Utilisateurs" layoutX="20" layoutY="20"/>
+
+    <TableView fx:id="userTable" layoutX="20" layoutY="60" prefWidth="400" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="200"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <Button fx:id="btn_AddUser" text="Ajouter un Utilisateur" layoutX="450" layoutY="60" onAction="#showAddUser"/>
+
+    <AnchorPane fx:id="addUser" layoutX="450" layoutY="100" prefWidth="300" prefHeight="200" visible="false">
+        <Label text="Nom:" layoutX="10" layoutY="10"/>
+        <TextField fx:id="nomField" layoutX="80" layoutY="10" prefWidth="200"/>
+
+        <Label text="Email:" layoutX="10" layoutY="50"/>
+        <TextField fx:id="emailField" layoutX="80" layoutY="50" prefWidth="200"/>
+
+        <Button text="Enregistrer" layoutX="80" layoutY="90" onAction="#addUser"/>
+        <Button text="Annuler" layoutX="180" layoutY="90" onAction="#hideAddUser"/>
+    </AnchorPane>
+
+    <Button fx:id="btn_DeleteUser" text="Supprimer" layoutX="450" layoutY="130" onAction="#deleteUser"/>
+    <Button fx:id="btn_UpdateUser" text="Mettre à jour" layoutX="450" layoutY="160" onAction="#showUpdateUser"/>
+
+    <AnchorPane fx:id="updateUser" layoutX="450" layoutY="200" prefWidth="300" prefHeight="200" visible="false">
+        <Label text="Nom:" layoutX="10" layoutY="10"/>
+        <TextField fx:id="updateNomField" layoutX="80" layoutY="10" prefWidth="200"/>
+
+        <Label text="Email:" layoutX="10" layoutY="50"/>
+        <TextField fx:id="updateEmailField" layoutX="80" layoutY="50" prefWidth="200"/>
+
+        <Button text="Enregistrer" layoutX="80" layoutY="90" onAction="#updateUser"/>
+        <Button text="Annuler" layoutX="180" layoutY="90" onAction="#hideUpdateUser"/>
+    </AnchorPane>
+</AnchorPane>
