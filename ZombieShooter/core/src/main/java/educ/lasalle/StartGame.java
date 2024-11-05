@@ -16,18 +16,15 @@ import static com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable.draw;
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
 public class StartGame extends ApplicationAdapter {
-    private final String ASSET_IMG_PATH = System.getProperty("user.dir") +"\\assets\\images\\";
-    private final String ASSET_SND_PATH = System.getProperty("user.dir") +"\\assets\\sounds\\";
     private SpriteBatch batch;
     private Texture image;
     Music music;
-    private Long soundId;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
-        music = Gdx.audio.newMusic(Gdx.files.internal(ASSET_SND_PATH + "background.mp3"));
+        image = AssetManager.loadTexture("libgdx.png");
+        music = AssetManager.loadMusic("background.mp3");
         music.setLooping(true);
         music.setVolume(.05f);
         music.play();
