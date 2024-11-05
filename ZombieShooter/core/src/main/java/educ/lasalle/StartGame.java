@@ -22,6 +22,7 @@ public class StartGame extends ApplicationAdapter {
     Music music;
     private SpriteBatch batch;
     private Texture image;
+    Texture background;
     Vector2 touchPos;
     Player player;
     ArrayList<Sprite> zbSprites;
@@ -32,6 +33,7 @@ public class StartGame extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         viewport = new FitViewport(8, 5);
+        background = AssetManager.loadTexture("background.png");
         image = AssetManager.loadTexture("libgdx.png");
         music = AssetManager.loadMusic("background.mp3");
         initMusic(music);
@@ -56,11 +58,14 @@ public class StartGame extends ApplicationAdapter {
     }
 
     private void draw() {
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        batch.begin();
 
+        batch.begin();
+        batch.draw(background, 0, 0, worldWidth, worldHeight);
         //batch.draw(image, 140, 210);
         player.getPlayerSprite().draw(batch);
 
@@ -138,6 +143,7 @@ public class StartGame extends ApplicationAdapter {
         disposeArray(zbSprites);
         disposeArray(bullets);
         player = null;
+        background = null;
     }
 
     private void disposeArray(ArrayList<Sprite> array) {
