@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -21,6 +22,7 @@ public class StartGame extends ApplicationAdapter {
     Music music;
     private SpriteBatch batch;
     private Texture image;
+    Vector2 touchPos;
     Player player;
     ArrayList<Sprite> zbSprites;
     ArrayList<Sprite> bullets;
@@ -33,6 +35,7 @@ public class StartGame extends ApplicationAdapter {
         image = AssetManager.loadTexture("libgdx.png");
         music = AssetManager.loadMusic("background.mp3");
         initMusic(music);
+        touchPos = new Vector2();
 
         player = new Player(0, 0);
         zbSprites = new ArrayList<>();
@@ -73,19 +76,21 @@ public class StartGame extends ApplicationAdapter {
     }
 
     private void input() {
+        float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
+        float speed = 7f;
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             // Move the player right
-            //playerSprite.translateX(speed * delta);
+            player.getPlayerSprite().translateX(speed * delta);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             // Move the player left
-            //bucketSprite.translateX(-speed * delta); // Move the bucket left
+            player.getPlayerSprite().translateX(-speed * delta); // Move the bucket left
         }
 
         if (Gdx.input.isTouched()) { // If the user has clicked or tapped the screen
-            //touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
-            //viewport.unproject(touchPos); // Convert the units to the world units of the viewport
-            //bucketSprite.setCenterX(touchPos.x); // Change the horizontally centered position of the bucket
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
+            viewport.unproject(touchPos); // Convert the units to the world units of the viewport
+            player.getPlayerSprite().setCenterX(touchPos.x); // Change the horizontally centered position of the bucket
         }
     }
 
