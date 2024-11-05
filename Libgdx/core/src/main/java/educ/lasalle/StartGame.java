@@ -37,6 +37,7 @@ public class StartGame extends ApplicationAdapter {
     short current_score;
     String score;
     BitmapFont bitMapFont;
+    GlyphLayout glyphLayout;
 
     @Override
     public void create() {
@@ -66,8 +67,11 @@ public class StartGame extends ApplicationAdapter {
 
         current_score = 0;
         score = "score: 0";
-        bitMapFont = new BitmapFont(new FileHandle(ASSET_UI_PATH + "font.fnt"), new TextureRegion(backgroundTexture));
+        //bitMapFont = new BitmapFont(new FileHandle(ASSET_UI_PATH + "font.fnt"), new TextureRegion(backgroundTexture));
         //bitMapFont.getData().scale(3f);
+        bitMapFont = new BitmapFont();
+        bitMapFont.setColor(Color.WHITE);
+        glyphLayout = new GlyphLayout();
     }
 
     @Override
@@ -86,6 +90,10 @@ public class StartGame extends ApplicationAdapter {
         //Affichage du score
         bitMapFont.draw(spriteBatch, score, 10, 10);
 
+        // Debug : Afficher un texte simple en haut à gauche
+        bitMapFont.draw(spriteBatch, score, 1, viewport.getWorldHeight() - 1);  // Affichage du score
+
+
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
@@ -103,7 +111,7 @@ public class StartGame extends ApplicationAdapter {
     private void logic() {
         // Store the worldWidth and worldHeight as local variables for brevity
         float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
+        //float worldHeight = viewport.getWorldHeight();
         // Store the bucket size for brevity
         float bucketWidth = bucketSprite.getWidth();
         float bucketHeight = bucketSprite.getHeight();
@@ -115,12 +123,6 @@ public class StartGame extends ApplicationAdapter {
         // Apply the bucket position and size to the bucketRectangle
         bucketRectangle.set(bucketSprite.getX(), bucketSprite.getY(), bucketWidth, bucketHeight);
 
-        /* Gouttes jamais vidée hors écran
-        // loop through each drop
-        for (Sprite dropSprite : dropSprites) {
-            dropSprite.translateY(-2f * delta); // move the drop downward every frame
-        }
-        */
         // Loop through the sprites backwards to prevent out of bounds errors
         for (int i = dropSprites.size - 1; i >= 0; i--) {
             Sprite dropSprite = dropSprites.get(i); // Get the sprite from the list
@@ -139,7 +141,7 @@ public class StartGame extends ApplicationAdapter {
                 dropSprites.removeIndex(i); // Remove the drop
                 dropSound.play(); // Play the sound
                 current_score++;
-                score = "score: " + score;
+                score = "score: %s".formatted(current_score);
             }
         }
 
@@ -162,7 +164,6 @@ public class StartGame extends ApplicationAdapter {
         }
 
         if (Gdx.input.isTouched()) { // If the user has clicked or tapped the screen
-            // todo:React to the player touching the screen
             touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
             viewport.unproject(touchPos); // Convert the units to the world units of the viewport
             bucketSprite.setCenterX(touchPos.x); // Change the horizontally centered position of the bucket
@@ -192,6 +193,11 @@ public class StartGame extends ApplicationAdapter {
     public void resize(int width, int height) {
         viewport.update(width, height, true); // true centers the camera
         //super.resize(width, height);
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
     }
 
     @Override
