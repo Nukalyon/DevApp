@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -25,9 +27,11 @@ public class StartGame extends ApplicationAdapter {
     Texture background;
     Vector2 touchPos;
     Player player;
-    ArrayList<Sprite> zbSprites;
-    ArrayList<Sprite> bullets;
+    ArrayList<Zombie> zombies;
+    ArrayList<Bullet> bullets;
     float dropTimer;
+    Rectangle playerRectangle;
+    Rectangle zombieRectangle;
 
     @Override
     public void create() {
@@ -40,8 +44,11 @@ public class StartGame extends ApplicationAdapter {
         touchPos = new Vector2();
 
         player = new Player(0, 0);
-        zbSprites = new ArrayList<>();
+        zombies = new ArrayList<>();
         createZombie();
+
+        playerRectangle = new Rectangle();
+        zombieRectangle = new Rectangle();
     }
 
     private void initMusic(Music music) {
@@ -73,8 +80,8 @@ public class StartGame extends ApplicationAdapter {
         //float worldHeight = viewport.getWorldHeight();
 
         // draw each sprite
-        for (Sprite zb : zbSprites) {
-            zb.draw(batch);
+        for (Zombie zb : zombies) {
+            zb.getZombieSprite().draw(batch);
         }
 
         batch.end();
@@ -100,26 +107,41 @@ public class StartGame extends ApplicationAdapter {
     }
 
     private void logic() {
+        // Store the worldWidth and worldHeight as local variables for brevity
+        float worldWidth = viewport.getWorldWidth();
+        //float worldHeight = viewport.getWorldHeight();
+        // Store the bucket size for brevity
+        float playerWidth = player.getPlayerSprite().getWidth();
+        float playerHeight = player.getPlayerSprite().getHeight();
+
+        // Clamp x to values between 0 and worldWidth
+        player.getPlayerSprite().setX(MathUtils.clamp(player.getPlayerSprite().getX(), 0, worldWidth - playerWidth));
+
+        // Apply the bucket position and size to the bucketRectangle
+        playerRectangle.set(player.getPlayerSprite().getX(), player.getPlayerSprite().getY(), playerWidth, playerHeight);
         float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
 
-        for (int i = zbSprites.size() - 1; i >= 0; i--) {
-            Sprite zbSprite = zbSprites.get(i); // Get the sprite from the list
+        for (int i = zombies.size() - 1; i >= 0; i--) {
+
+            // Get the sprite from the list
+            Sprite zbSprite = zombies.get(i).getZombieSprite();
+
+            zbSprite.translateY(-2f * delta);
+
             float zbWidth = zbSprite.getWidth();
             float zbHeight = zbSprite.getHeight();
 
-            zbSprite.translateY(-2f * delta);
-            // Apply the drop position and size to the dropRectangle
-            //dropRectangle.set(dropSprite.getX(), dropSprite.getY(), dropWidth, dropHeight);
+            // Apply the zombie position and size to the zombieRectangle
+            zombieRectangle.set(zbSprite.getX(), zbSprite.getY(), zbWidth, zbHeight);
 
-            // if the top of the drop goes below the bottom of the view, remove it
-            if (zbSprite.getY() < -zbHeight)
-                zbSprites.remove(i);
-            /*
-                // Check if the bucket overlaps the drop
-            else if (bucketRectangle.overlaps(dropRectangle)) {
-                zbSprites.remove(i); // Remove the drop
+            // if the top of the zombie goes below the bottom of the view, remove it
+            if (zbSprite.getY() < -1)
+                zombies.remove(i);
+                // Check if the player overlaps the player
+            else if (playerRectangle.overlaps(zombieRectangle)) {
+                zombies.get(i).inflictDamage(player);
+                zombies.remove(i); // Remove the zombie
             }
-             */
         }
 
         dropTimer += delta;
@@ -140,13 +162,13 @@ public class StartGame extends ApplicationAdapter {
         batch.dispose();
         image.dispose();
         music.dispose();
-        disposeArray(zbSprites);
+        disposeArray(zombies);
         disposeArray(bullets);
         player = null;
         background = null;
     }
 
-    private void disposeArray(ArrayList<Sprite> array) {
+    private <T> void disposeArray(ArrayList<T> array) {
         if (array != null && !array.isEmpty()) {
             array.clear();
         }
@@ -155,6 +177,6 @@ public class StartGame extends ApplicationAdapter {
     private void createZombie() {
         Zombie zombie = new Zombie();
         zombie.initPosition(viewport);
-        zbSprites.add(zombie.getZombieSprite());
+        zombies.add(zombie);
     }
 }

@@ -10,6 +10,7 @@ public class Zombie {
     private Sprite zombieSprite;
     private int posX;
     private int posY;
+    private final byte damage = 8;
 
     public Zombie() {
         zombieTexture = AssetManager.loadTexture("zombie.png");
@@ -44,5 +45,10 @@ public class Zombie {
         zombieSprite.setX(MathUtils.random(0f, worldWidth - 1));
         zombieSprite.setY(worldHeight);
         zombieSprite.rotate90(true);
+    }
+
+    public void inflictDamage(Player player)
+    {
+        player.receiveDamage(this.damage);
     }
 }
