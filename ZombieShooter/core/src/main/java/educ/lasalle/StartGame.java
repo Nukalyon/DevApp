@@ -6,10 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -30,8 +27,6 @@ public class StartGame extends ApplicationAdapter {
     ArrayList<Zombie> zombies;
     ArrayList<Bullet> bullets;
     float dropTimer;
-    Rectangle playerRectangle;
-    Rectangle zombieRectangle;
 
     @Override
     public void create() {
@@ -43,25 +38,56 @@ public class StartGame extends ApplicationAdapter {
         initMusic(music);
         touchPos = new Vector2();
 
-        player = new Player(0, 0);
+        player = new Player();
         zombies = new ArrayList<>();
         createZombie();
+        bullets = new ArrayList<>();
+        createBullet();
 
-        playerRectangle = new Rectangle();
-        zombieRectangle = new Rectangle();
     }
 
     private void initMusic(Music music) {
         music.setLooping(true);
-        music.setVolume(.15f);
+        music.setVolume(.05f);
         music.play();
     }
 
     @Override
     public void render() {
         input();
-        logic();
+        logicBullet();
+        logicZombie();
         draw();
+    }
+
+    private void logicBullet() {
+        // retrieve the current delta
+        float delta = Gdx.graphics.getDeltaTime();
+        //Déplacement des balles
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+
+            bullets.get(i).update(delta);
+
+            // if the top of the bullet goes below the top of the view, remove it
+            if (bullets.get(i).getBulletSprite().getY() < -1) {
+                bullets.remove(i);
+            }
+
+            // Check collision with zombie
+            for (Zombie zombie : zombies) {
+                if (zombie.checkCollision(bullets.get(i))) {
+                    zombies.remove(zombie);
+                    bullets.remove(i);
+                    break;
+                }
+            }
+        }
+
+        CooldownManager.updateCooldownBullet(delta);
+        if(CooldownManager.canShoot)
+        {
+            createBullet();
+        }
     }
 
     private void draw() {
@@ -73,74 +99,55 @@ public class StartGame extends ApplicationAdapter {
 
         batch.begin();
         batch.draw(background, 0, 0, worldWidth, worldHeight);
-        //batch.draw(image, 140, 210);
         player.getPlayerSprite().draw(batch);
 
-        //float worldWidth = viewport.getWorldWidth();
-        //float worldHeight = viewport.getWorldHeight();
-
-        // draw each sprite
+        // Draw all zombies
         for (Zombie zb : zombies) {
             zb.getZombieSprite().draw(batch);
+        }
+        // Draw all bullets
+        for (Bullet bt: bullets)
+        {
+            bt.getBulletSprite().draw(batch);
         }
 
         batch.end();
     }
 
     private void input() {
-        float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
+        float delta = Gdx.graphics.getDeltaTime();
         float speed = 7f;
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            // Move the player right
             player.getPlayerSprite().translateX(speed * delta);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            // Move the player left
             player.getPlayerSprite().translateX(-speed * delta); // Move the bucket left
         }
 
-        if (Gdx.input.isTouched()) { // If the user has clicked or tapped the screen
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
-            viewport.unproject(touchPos); // Convert the units to the world units of the viewport
-            player.getPlayerSprite().setCenterX(touchPos.x); // Change the horizontally centered position of the bucket
+        // If the user has clicked or tapped the screen
+        if (Gdx.input.isTouched()) {
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+            viewport.unproject(touchPos);
+            player.getPlayerSprite().setCenterX(touchPos.x);
         }
     }
 
-    private void logic() {
-        // Store the worldWidth and worldHeight as local variables for brevity
-        float worldWidth = viewport.getWorldWidth();
-        //float worldHeight = viewport.getWorldHeight();
-        // Store the bucket size for brevity
-        float playerWidth = player.getPlayerSprite().getWidth();
-        float playerHeight = player.getPlayerSprite().getHeight();
+    private void logicZombie() {
+        // retrieve the current delta
+        float delta = Gdx.graphics.getDeltaTime();
+        player.update(viewport);
 
-        // Clamp x to values between 0 and worldWidth
-        player.getPlayerSprite().setX(MathUtils.clamp(player.getPlayerSprite().getX(), 0, worldWidth - playerWidth));
-
-        // Apply the bucket position and size to the bucketRectangle
-        playerRectangle.set(player.getPlayerSprite().getX(), player.getPlayerSprite().getY(), playerWidth, playerHeight);
-        float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
-
+        //Déplacement des zombies
         for (int i = zombies.size() - 1; i >= 0; i--) {
 
-            // Get the sprite from the list
-            Sprite zbSprite = zombies.get(i).getZombieSprite();
-
-            zbSprite.translateY(-2f * delta);
-
-            float zbWidth = zbSprite.getWidth();
-            float zbHeight = zbSprite.getHeight();
-
-            // Apply the zombie position and size to the zombieRectangle
-            zombieRectangle.set(zbSprite.getX(), zbSprite.getY(), zbWidth, zbHeight);
+            zombies.get(i).update(delta);
 
             // if the top of the zombie goes below the bottom of the view, remove it
-            if (zbSprite.getY() < -1)
+            if (zombies.get(i).getZombieSprite().getY() < -1) {
                 zombies.remove(i);
-                // Check if the player overlaps the player
-            else if (playerRectangle.overlaps(zombieRectangle)) {
+            } else if (zombies.get(i).checkCollision(player)) {
                 zombies.get(i).inflictDamage(player);
-                zombies.remove(i); // Remove the zombie
+                zombies.remove(i);
             }
         }
 
@@ -154,7 +161,6 @@ public class StartGame extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        //super.resize(width, height);
     }
 
     @Override
@@ -178,5 +184,11 @@ public class StartGame extends ApplicationAdapter {
         Zombie zombie = new Zombie();
         zombie.initPosition(viewport);
         zombies.add(zombie);
+    }
+
+    private void createBullet(){
+        Bullet bullet = new Bullet();
+        bullet.initPosition(player.getPlayerSprite());
+        bullets.add(bullet);
     }
 }
