@@ -28,6 +28,8 @@ public class StartGame extends ApplicationAdapter {
     ArrayList<Bullet> bullets;
     float dropTimer;
 
+    private ScoreManager scoreManager;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -44,6 +46,7 @@ public class StartGame extends ApplicationAdapter {
         bullets = new ArrayList<>();
         createBullet();
 
+        scoreManager = new ScoreManager();
     }
 
     private void initMusic(Music music) {
@@ -78,6 +81,8 @@ public class StartGame extends ApplicationAdapter {
                 if (zombie.checkCollision(bullets.get(i))) {
                     zombies.remove(zombie);
                     bullets.remove(i);
+                    scoreManager.increaseScore(1);
+                    System.out.println(scoreManager.getScore());
                     break;
                 }
             }
