@@ -37,15 +37,4 @@ public class Bullet implements IDisplayElement{
     public float getSize() {
         return this.bulletSize;
     }
-    /*
-    public void update(float delta) {
-        this.bulletSprite.translateY(2f * delta);
-        this.bulletRectangle.set(
-            this.bulletSprite.getX(),
-            this.bulletSprite.getY(),
-            bulletSize,
-            bulletSize
-        );
-    }
-     */
 }

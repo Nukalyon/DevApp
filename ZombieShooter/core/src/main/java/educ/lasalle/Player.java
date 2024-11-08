@@ -2,9 +2,7 @@ package educ.lasalle;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Player implements IDisplayElement{
     private Texture playertexture;
@@ -44,22 +42,5 @@ public class Player implements IDisplayElement{
     public float getSize(){
         return this.playerSize;
     }
-
-    /*
-    public void update(FitViewport viewport) {
-        float worldWidth = viewport.getWorldWidth();
-
-        // Clamp x to values between 0 and worldWidth
-        this.playerSprite.setX(MathUtils.clamp(this.playerSprite.getX(), 0, worldWidth - this.playerSize));
-
-        // Apply the bucket position and size to the bucketRectangle
-        this.playerRectangle.set(
-            this.playerSprite.getX(),
-            this.playerSprite.getY(),
-            this.playerSize,
-            this.playerSize
-        );
-    }
-     */
 
 }
