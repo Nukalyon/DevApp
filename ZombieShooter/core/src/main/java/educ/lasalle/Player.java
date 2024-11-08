@@ -29,6 +29,10 @@ public class Player implements IDisplayElement{
         }
     }
 
+    public boolean isDead(){
+        return this.lifePoint <= 0;
+    }
+
     @Override
     public Sprite getSprite() {
         return this.playerSprite;
