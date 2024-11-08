@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -32,6 +33,8 @@ public class StartGame extends ApplicationAdapter {
     float dropTimer;
     State state = State.RUN;
 
+    BitmapFont scoreFont;
+    ScoreManager scoreManager;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -48,6 +51,11 @@ public class StartGame extends ApplicationAdapter {
         bulletControllers = new ArrayList<>();
         createBullet();
 
+        scoreFont = new BitmapFont();
+        scoreFont.setColor(Color.WHITE);
+        scoreFont.setUseIntegerPositions(false);
+        scoreFont.getData().setScale(0.015f);
+        scoreManager = new ScoreManager();
     }
 
     private void createPlayer() {
@@ -106,6 +114,7 @@ public class StartGame extends ApplicationAdapter {
                 if (zbc.checkCollision(bulletControllers.get(i))) {
                     zombieControllers.remove(zbc);
                     bulletControllers.remove(i);
+                    scoreManager.increaseScore(1);
                     break;
                 }
             }
@@ -129,7 +138,7 @@ public class StartGame extends ApplicationAdapter {
 
         batch.draw(background, 0, 0, worldWidth, worldHeight);
         playerController.getSprite().draw(batch);
-
+        scoreFont.draw(batch, "Score: " + scoreManager.getScore(), 0, viewport.getWorldHeight());
         // Draw all zombies
         for (ZombieController zbc : zombieControllers) {
             zbc.getSprite().draw(batch);
@@ -223,6 +232,7 @@ public class StartGame extends ApplicationAdapter {
         disposeArray(bulletControllers);
         playerController = null;
         background = null;
+        scoreFont.dispose();
     }
 
     private <T> void disposeArray(ArrayList<T> array) {
