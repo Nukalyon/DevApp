@@ -6,8 +6,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -24,8 +26,9 @@ public class StartGame extends ApplicationAdapter {
     Texture background;
     Vector2 touchPos;
     Player player;
-    ArrayList<Zombie> zombies;
-    ArrayList<Bullet> bullets;
+    PlayerController playerController;
+    ArrayList<ZombieController> zombieControllers;
+    ArrayList<BulletController> bulletControllers;
     float dropTimer;
 
     @Override
@@ -38,12 +41,17 @@ public class StartGame extends ApplicationAdapter {
         initMusic(music);
         touchPos = new Vector2();
 
-        player = new Player();
-        zombies = new ArrayList<>();
+        createPlayer();
+        zombieControllers = new ArrayList<>();
         createZombie();
-        bullets = new ArrayList<>();
+        bulletControllers = new ArrayList<>();
         createBullet();
 
+    }
+
+    private void createPlayer() {
+        player = new Player();
+        playerController = new PlayerController(player, viewport);
     }
 
     private void initMusic(Music music) {
@@ -64,20 +72,21 @@ public class StartGame extends ApplicationAdapter {
         // retrieve the current delta
         float delta = Gdx.graphics.getDeltaTime();
         //Déplacement des balles
-        for (int i = bullets.size() - 1; i >= 0; i--) {
+        for (int i = bulletControllers.size() - 1; i >= 0; i--) {
 
-            bullets.get(i).update(delta);
+            BulletController bci = bulletControllers.get(i);
+            bci.update(delta);
 
-            // if the top of the bullet goes below the top of the view, remove it
-            if (bullets.get(i).getBulletSprite().getY() < -1) {
-                bullets.remove(i);
+            // if the top of the bullet goes beyond the top of the view, remove it
+            if (bci.getSprite().getY() < -1) {
+                bulletControllers.remove(i);
             }
 
             // Check collision with zombie
-            for (Zombie zombie : zombies) {
-                if (zombie.checkCollision(bullets.get(i))) {
-                    zombies.remove(zombie);
-                    bullets.remove(i);
+            for (ZombieController zbc : zombieControllers) {
+                if (zbc.checkCollision(bulletControllers.get(i))) {
+                    zombieControllers.remove(zbc);
+                    bulletControllers.remove(i);
                     break;
                 }
             }
@@ -98,17 +107,18 @@ public class StartGame extends ApplicationAdapter {
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
         batch.begin();
+
         batch.draw(background, 0, 0, worldWidth, worldHeight);
-        player.getPlayerSprite().draw(batch);
+        playerController.getSprite().draw(batch);
 
         // Draw all zombies
-        for (Zombie zb : zombies) {
-            zb.getZombieSprite().draw(batch);
+        for (ZombieController zbc : zombieControllers) {
+            zbc.getSprite().draw(batch);
         }
         // Draw all bullets
-        for (Bullet bt: bullets)
+        for (BulletController btc: bulletControllers)
         {
-            bt.getBulletSprite().draw(batch);
+            btc.getSprite().draw(batch);
         }
 
         batch.end();
@@ -117,37 +127,39 @@ public class StartGame extends ApplicationAdapter {
     private void input() {
         float delta = Gdx.graphics.getDeltaTime();
         float speed = 7f;
+        Sprite playerSprite = playerController.getSprite();
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.getPlayerSprite().translateX(speed * delta);
+            playerSprite.translateX(speed * delta);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.getPlayerSprite().translateX(-speed * delta); // Move the bucket left
+            playerSprite.translateX(-speed * delta); // Move the bucket left
         }
 
         // If the user has clicked or tapped the screen
         if (Gdx.input.isTouched()) {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY());
             viewport.unproject(touchPos);
-            player.getPlayerSprite().setCenterX(touchPos.x);
+            playerSprite.setCenterX(touchPos.x);
         }
     }
 
     private void logicZombie() {
         // retrieve the current delta
         float delta = Gdx.graphics.getDeltaTime();
-        player.update(viewport);
+        playerController.update();
 
         //Déplacement des zombies
-        for (int i = zombies.size() - 1; i >= 0; i--) {
+        for (int i = zombieControllers.size() - 1; i >= 0; i--) {
 
-            zombies.get(i).update(delta);
+            ZombieController zci = zombieControllers.get(i);
+            zci.update(delta);
 
             // if the top of the zombie goes below the bottom of the view, remove it
-            if (zombies.get(i).getZombieSprite().getY() < -1) {
-                zombies.remove(i);
-            } else if (zombies.get(i).checkCollision(player)) {
-                zombies.get(i).inflictDamage(player);
-                zombies.remove(i);
+            if (zci.getSprite().getY() < -1) {
+                zombieControllers.remove(i);
+            } else if (zci.checkCollision(playerController)) {
+                zci.inflictDamage(playerController);
+                zombieControllers.remove(i);
             }
         }
 
@@ -168,9 +180,9 @@ public class StartGame extends ApplicationAdapter {
         batch.dispose();
         image.dispose();
         music.dispose();
-        disposeArray(zombies);
-        disposeArray(bullets);
-        player = null;
+        disposeArray(zombieControllers);
+        disposeArray(bulletControllers);
+        playerController = null;
         background = null;
     }
 
@@ -182,13 +194,18 @@ public class StartGame extends ApplicationAdapter {
 
     private void createZombie() {
         Zombie zombie = new Zombie();
-        zombie.initPosition(viewport);
-        zombies.add(zombie);
+        ZombieController zombieController = new ZombieController(zombie, viewport);
+        zombieController.initPosition();
+
+        zombieControllers.add(zombieController);
     }
 
     private void createBullet(){
+        // Initialisation de la bullet
         Bullet bullet = new Bullet();
-        bullet.initPosition(player.getPlayerSprite());
-        bullets.add(bullet);
+        BulletController bulletController = new BulletController(bullet, viewport);
+        bulletController.initPosition(playerController.getSprite());
+
+        bulletControllers.add(bulletController);
     }
 }

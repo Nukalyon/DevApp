@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class Player {
+public class Player implements IDisplayElement{
     private Texture playertexture;
     private Sprite playerSprite;
     private byte lifePoint;   //Value between -128 and 127
@@ -22,10 +22,6 @@ public class Player {
         playerRectangle = new Rectangle(playerSprite.getX(), playerSprite.getY(), playerSize, playerSize);
     }
 
-    public Sprite getPlayerSprite() {
-        return this.playerSprite;
-    }
-
     public void receiveDamage(byte amount) {
         this.lifePoint -= amount;
         System.out.println(this.lifePoint);
@@ -35,10 +31,21 @@ public class Player {
         }
     }
 
-    public Rectangle getBoundingBox() {
+    @Override
+    public Sprite getSprite() {
+        return this.playerSprite;
+    }
+
+    @Override
+    public Rectangle getBox() {
         return this.playerRectangle;
     }
 
+    public float getSize(){
+        return this.playerSize;
+    }
+
+    /*
     public void update(FitViewport viewport) {
         float worldWidth = viewport.getWorldWidth();
 
@@ -53,4 +60,6 @@ public class Player {
             this.playerSize
         );
     }
+     */
+
 }

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class Zombie {
+public class Zombie implements IDisplayElement{
     private final Texture zombieTexture;
     private final Sprite zombieSprite;
     private final float zombieSize = 1f;
@@ -18,10 +18,6 @@ public class Zombie {
         zombieSprite = new Sprite(zombieTexture);
         zombieSprite.setSize(zombieSize, zombieSize);
         zombieBox = new Rectangle(zombieSprite.getX(), zombieSprite.getY(), zombieSize, zombieSize);
-    }
-
-    public Sprite getZombieSprite() {
-        return this.zombieSprite;
     }
 
     public void initPosition(FitViewport viewport) {
@@ -39,11 +35,11 @@ public class Zombie {
     }
 
     public boolean checkCollision(Bullet bullet) {
-        return bullet.getBoundingBox().overlaps(this.zombieBox);
+        return bullet.getBox().overlaps(this.zombieBox);
     }
 
     public boolean checkCollision(Player player) {
-        return this.zombieBox.overlaps(player.getBoundingBox());
+        return this.zombieBox.overlaps(player.getBox());
     }
 
     public void update(float delta) {
@@ -54,5 +50,24 @@ public class Zombie {
             zombieSize,
             zombieSize
         );
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return this.zombieSprite;
+    }
+
+    @Override
+    public Rectangle getBox() {
+        return this.zombieBox;
+    }
+
+    @Override
+    public float getSize() {
+        return this.zombieSize;
+    }
+
+    public byte getDamage() {
+        return damage;
     }
 }

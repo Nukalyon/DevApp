@@ -4,21 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Bullet {
+public class Bullet implements IDisplayElement{
     private Texture bulletTexture;
     private Sprite bulletSprite;
     private final float bulletSize = .35f;
     private Rectangle bulletRectangle;
 
-    public Bullet() {
+    public Bullet(){
         bulletTexture = AssetManager.loadTexture("bullet.png");
         bulletSprite = new Sprite(bulletTexture);
         bulletSprite.setSize(bulletSize, bulletSize);
         bulletRectangle = new Rectangle(bulletSprite.getX(), bulletSprite.getY(), bulletSize, bulletSize);
-    }
-
-    public Sprite getBulletSprite() {
-        return this.bulletSprite;
     }
 
     public void initPosition(Sprite playerSprite) {
@@ -27,10 +23,21 @@ public class Bullet {
         bulletSprite.rotate90(false);
     }
 
-    public Rectangle getBoundingBox() {
+    @Override
+    public Sprite getSprite() {
+        return this.bulletSprite;
+    }
+
+    @Override
+    public Rectangle getBox() {
         return this.bulletRectangle;
     }
 
+    @Override
+    public float getSize() {
+        return this.bulletSize;
+    }
+    /*
     public void update(float delta) {
         this.bulletSprite.translateY(2f * delta);
         this.bulletRectangle.set(
@@ -40,4 +47,5 @@ public class Bullet {
             bulletSize
         );
     }
+     */
 }
