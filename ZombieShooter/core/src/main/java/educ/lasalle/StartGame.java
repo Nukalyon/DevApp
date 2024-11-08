@@ -30,6 +30,7 @@ public class StartGame extends ApplicationAdapter {
     ArrayList<ZombieController> zombieControllers;
     ArrayList<BulletController> bulletControllers;
     float dropTimer;
+    State state = State.RUN;
 
     @Override
     public void create() {
@@ -61,11 +62,29 @@ public class StartGame extends ApplicationAdapter {
     }
 
     @Override
-    public void render() {
-        input();
-        logicBullet();
-        logicZombie();
-        draw();
+    public void render()
+    {
+        switch (state)
+        {
+            case RUN:
+                input();
+                logicBullet();
+                logicZombie();
+                draw();
+                break;
+            case PAUSE:
+                pause();
+                break;
+            case RESUME:
+                resume();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setState(State state) {
+        this.state = state;
     }
 
     private void logicBullet() {
@@ -128,6 +147,7 @@ public class StartGame extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
         float speed = 7f;
         Sprite playerSprite = playerController.getSprite();
+
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             playerSprite.translateX(speed * delta);
         }
@@ -141,6 +161,25 @@ public class StartGame extends ApplicationAdapter {
             viewport.unproject(touchPos);
             playerSprite.setCenterX(touchPos.x);
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            setState(State.PAUSE);
+        }
+    }
+
+    private void displayPauseMenu() {
+    }
+
+    @Override
+    public void pause() {
+        music.stop();
+        displayPauseMenu();
+        super.pause();
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
     }
 
     private void logicZombie() {
