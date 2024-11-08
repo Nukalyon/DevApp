@@ -28,11 +28,6 @@ public class Player {
 
     public void receiveDamage(byte amount) {
         this.lifePoint -= amount;
-        System.out.println(this.lifePoint);
-        if (this.lifePoint <= 0) {
-            // Game Over
-            this.lifePoint = 0;
-        }
     }
 
     public Rectangle getBoundingBox() {
@@ -52,5 +47,8 @@ public class Player {
             this.playerSize,
             this.playerSize
         );
+    }
+    public boolean isDead(){
+        return this.lifePoint <= 0;
     }
 }

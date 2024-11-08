@@ -1,7 +1,7 @@
 package educ.lasalle;
 
 public class ScoreManager {
-
+    private static final int MAX_SCORE = 100;
     private int score;
 
     public ScoreManager() {
@@ -10,13 +10,12 @@ public class ScoreManager {
 
     public void increaseScore(int amount) {
         score += amount;
+        if (score > MAX_SCORE) {
+            score = 0;
+        }
     }
 
     public int getScore() {
         return score;
-    }
-
-    public void resetScore() {
-        score = 0;
     }
 }

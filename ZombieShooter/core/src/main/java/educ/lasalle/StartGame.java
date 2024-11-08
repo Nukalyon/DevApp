@@ -6,11 +6,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +29,7 @@ public class StartGame extends ApplicationAdapter {
     ArrayList<Zombie> zombies;
     ArrayList<Bullet> bullets;
     float dropTimer;
+    BitmapFont font;
 
     private ScoreManager scoreManager;
 
@@ -46,6 +49,10 @@ public class StartGame extends ApplicationAdapter {
         bullets = new ArrayList<>();
         createBullet();
 
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(0.015f);
         scoreManager = new ScoreManager();
     }
 
@@ -61,6 +68,9 @@ public class StartGame extends ApplicationAdapter {
         logicBullet();
         logicZombie();
         draw();
+        if (player.isDead()) {
+            //Set game over screen
+        }
     }
 
     private void logicBullet() {
@@ -82,7 +92,6 @@ public class StartGame extends ApplicationAdapter {
                     zombies.remove(zombie);
                     bullets.remove(i);
                     scoreManager.increaseScore(1);
-                    System.out.println(scoreManager.getScore());
                     break;
                 }
             }
@@ -105,7 +114,7 @@ public class StartGame extends ApplicationAdapter {
         batch.begin();
         batch.draw(background, 0, 0, worldWidth, worldHeight);
         player.getPlayerSprite().draw(batch);
-
+        font.draw(batch, "Score: " + scoreManager.getScore(), 0, viewport.getWorldHeight());
         // Draw all zombies
         for (Zombie zb : zombies) {
             zb.getZombieSprite().draw(batch);
@@ -177,6 +186,7 @@ public class StartGame extends ApplicationAdapter {
         disposeArray(bullets);
         player = null;
         background = null;
+        font.dispose();
     }
 
     private <T> void disposeArray(ArrayList<T> array) {
