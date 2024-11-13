@@ -1,4 +1,4 @@
-package educ.lasalle;
+package educ.lasalle.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

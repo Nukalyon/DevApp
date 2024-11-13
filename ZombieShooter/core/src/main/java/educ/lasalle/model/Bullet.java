@@ -1,10 +1,11 @@
-package educ.lasalle;
+package educ.lasalle.model;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import educ.lasalle.manager.AssetManager;
 
-public class Bullet implements IDisplayElement{
+public class Bullet implements IDisplayElement {
     private Texture bulletTexture;
     private Sprite bulletSprite;
     private final float bulletSize = .35f;

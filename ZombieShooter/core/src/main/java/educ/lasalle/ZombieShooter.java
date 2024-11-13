@@ -10,16 +10,31 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import educ.lasalle.controller.BulletController;
+import educ.lasalle.controller.PlayerController;
+import educ.lasalle.controller.ZombieController;
+import educ.lasalle.manager.AssetManager;
+import educ.lasalle.manager.CooldownManager;
+import educ.lasalle.manager.ScoreManager;
+import educ.lasalle.model.Bullet;
+import educ.lasalle.model.Player;
+import educ.lasalle.model.Zombie;
 
 import java.util.ArrayList;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
-public class StartGame extends ApplicationAdapter {
+public class ZombieShooter extends ApplicationAdapter {
+    static final int GAME_READY = 0;
+    static final int GAME_RUNNING = 1;
+    static final int GAME_PAUSED = 2;
+    static final int GAME_LEVEL_END = 3;
+    static final int GAME_OVER = 4;
+
+
     FitViewport viewport;
     Music music;
     private SpriteBatch batch;
@@ -31,12 +46,14 @@ public class StartGame extends ApplicationAdapter {
     ArrayList<ZombieController> zombieControllers;
     ArrayList<BulletController> bulletControllers;
     float dropTimer;
-    State state = State.RUN;
+    int state;
 
     BitmapFont scoreFont;
     ScoreManager scoreManager;
+
     @Override
     public void create() {
+        state = GAME_READY;
         batch = new SpriteBatch();
         viewport = new FitViewport(8, 5);
         background = AssetManager.loadTexture("background.png");
@@ -74,25 +91,21 @@ public class StartGame extends ApplicationAdapter {
     {
         switch (state)
         {
-            case RUN:
+            case GAME_READY:
+                //resume();
                 input();
                 logicBullet();
                 logicZombie();
                 draw();
                 break;
-            case PAUSE:
-                pause();
-                break;
-            case RESUME:
-                resume();
+            case GAME_PAUSED:
+                music.stop();
+                displayPauseMenu();
+                //pause();
                 break;
             default:
                 break;
         }
-    }
-
-    private void setState(State state) {
-        this.state = state;
     }
 
     private void logicBullet() {
@@ -172,23 +185,13 @@ public class StartGame extends ApplicationAdapter {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            setState(State.PAUSE);
+            // open pause menu
+            state = (state == GAME_PAUSED ? GAME_RUNNING : GAME_PAUSED);
         }
     }
 
     private void displayPauseMenu() {
-    }
 
-    @Override
-    public void pause() {
-        music.stop();
-        displayPauseMenu();
-        super.pause();
-    }
-
-    @Override
-    public void resume() {
-        super.resume();
     }
 
     private void logicZombie() {
@@ -218,6 +221,23 @@ public class StartGame extends ApplicationAdapter {
         }
     }
 
+    private void createZombie() {
+        Zombie zombie = new Zombie();
+        ZombieController zombieController = new ZombieController(zombie, viewport);
+        zombieController.initPosition();
+
+        zombieControllers.add(zombieController);
+    }
+
+    private void createBullet(){
+        // Initialisation de la bullet
+        Bullet bullet = new Bullet();
+        BulletController bulletController = new BulletController(bullet, viewport);
+        bulletController.initPosition(playerController.getSprite());
+
+        bulletControllers.add(bulletController);
+    }
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -239,22 +259,5 @@ public class StartGame extends ApplicationAdapter {
         if (array != null && !array.isEmpty()) {
             array.clear();
         }
-    }
-
-    private void createZombie() {
-        Zombie zombie = new Zombie();
-        ZombieController zombieController = new ZombieController(zombie, viewport);
-        zombieController.initPosition();
-
-        zombieControllers.add(zombieController);
-    }
-
-    private void createBullet(){
-        // Initialisation de la bullet
-        Bullet bullet = new Bullet();
-        BulletController bulletController = new BulletController(bullet, viewport);
-        bulletController.initPosition(playerController.getSprite());
-
-        bulletControllers.add(bulletController);
     }
 }

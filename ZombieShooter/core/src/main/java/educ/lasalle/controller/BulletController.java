@@ -1,9 +1,9 @@
-package educ.lasalle;
+package educ.lasalle.controller;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import educ.lasalle.model.Bullet;
 
 public class BulletController {
     private Bullet bullet;

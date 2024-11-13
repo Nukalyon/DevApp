@@ -1,4 +1,4 @@
-package educ.lasalle;
+package educ.lasalle.manager;
 
 public class CooldownManager {
 

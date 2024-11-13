@@ -1,10 +1,10 @@
-package educ.lasalle;
+package educ.lasalle.controller;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import educ.lasalle.model.Player;
 
 public class PlayerController {
     private Player player;

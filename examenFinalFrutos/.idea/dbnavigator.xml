@@ -1,16 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DBNavigator.Project.DDLFileAttachmentManager">
+    <mappings />
+    <preferences />
+  </component>
+  <component name="DBNavigator.Project.DataEditorManager">
+    <record-view-column-sorting-type value="BY_INDEX" />
+    <value-preview-text-wrapping value="false" />
+    <value-preview-pinned value="false" />
+  </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
     <loaded-nodes />
   </component>
+  <component name="DBNavigator.Project.DatabaseConsoleManager">
+    <connection id="82e86619-9c47-4049-881d-49d34e88fce5">
+      <console name="Connection" type="STANDARD" schema="bibliotheque" session="Main"><![CDATA[USE bibliotheque;
+
+
+-- Suppression des tables avant création
+-- Mise en accord des tables et du code
+DROP TABLE IF EXISTS Abonne;
+DROP TABLE IF EXISTS Livre;
+DROP TABLE IF EXISTS Emprunt;
+
+
+-- Création de la table Abonne
+CREATE TABLE Abonne (
+    idAbonne INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    adresse VARCHAR(255) NOT NULL,
+    date_inscription TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    type_abonnement ENUM('standard', 'premium') NOT NULL,
+    cotisation DECIMAL(10,2) NOT NULL
+);
+
+-- Création de la table Livre
+CREATE TABLE Livre (
+    idLivre INT PRIMARY KEY AUTO_INCREMENT,
+    titre VARCHAR(100) NOT NULL,
+    auteur VARCHAR(100) NOT NULL,
+    annee_publication INT NOT NULL,
+    disponible BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+-- Création de la table Emprunt
+CREATE TABLE Emprunt (
+    idEmprunt INT PRIMARY KEY AUTO_INCREMENT,
+    idAbonne INT NOT NULL,
+    idLivre INT NOT NULL,
+    date_emprunt TIMESTAMP NULL,
+    date_retour TIMESTAMP NULL,
+    CONSTRAINT fk_abonne FOREIGN KEY (idAbonne) REFERENCES Abonne(idAbonne),
+    CONSTRAINT fk_livre FOREIGN KEY (idLivre) REFERENCES Livre(idLivre)
+);
+
+
+
+
+INSERT INTO Abonne (nom, prenom, adresse, type_abonnement, cotisation)
+VALUES
+    ('Dupont', 'Jean', '123 rue de Paris, 75000 Paris', 'standard', 30.00),
+    ('Martin', 'Sophie', '45 avenue des Champs, 75008 Paris', 'premium', 50.00),
+    ('Lemoine', 'Pierre', '10 rue du Soleil, 13000 Marseille', 'standard', 25.00),
+    ('Bernard', 'Claire', '87 boulevard des Belges, 59000 Lille', 'premium', 60.00);
+
+
+
+INSERT INTO Livre (titre, auteur, annee_publication)
+VALUES
+    ('Le Petit Prince', 'Antoine de Saint-Exupéry', 1943),
+    ('1984', 'George Orwell', 1949),
+    ('La Peste', 'Albert Camus', 1947),
+    ('L Étranger', 'Albert Camus', 1942);]]></console>
+    </connection>
+  </component>
+  <component name="DBNavigator.Project.DatabaseEditorStateManager">
+    <last-used-providers />
+  </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="82e86619-9c47-4049-881d-49d34e88fce5" object-ref="consoles/Connection" />
+    </open-files>
+  </component>
+  <component name="DBNavigator.Project.DatabaseSessionManager">
+    <connection id="82e86619-9c47-4049-881d-49d34e88fce5" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
+  </component>
+  <component name="DBNavigator.Project.ObjectQuickFilterManager">
+    <last-used-operator value="EQUAL" />
+    <filters />
+  </component>
+  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
+    <recently-used-interfaces>
+      <mapping database-type="MYSQL" interface-id="DEFAULT" />
+    </recently-used-interfaces>
   </component>
   <component name="DBNavigator.Project.Settings">
-    <connections />
+    <connections>
+      <connection id="82e86619-9c47-4049-881d-49d34e88fce5" active="true" signed="true">
+        <database>
+          <name value="Connection" />
+          <description value="" />
+          <database-type value="MYSQL" />
+          <config-type value="BASIC" />
+          <database-version value="8.3" />
+          <driver-source value="BUNDLED" />
+          <driver-library value="" />
+          <driver value="" />
+          <url-type value="DATABASE" />
+          <host value="localhost" />
+          <port value="3306" />
+          <database value="bibliotheque" />
+          <tns-folder value="" />
+          <tns-profile value="" />
+          <type value="USER" />
+          <user value="root" />
+          <deprecated-pwd value="" />
+        </database>
+        <properties>
+          <auto-commit value="false" />
+        </properties>
+        <ssh-settings>
+          <active value="false" />
+          <proxy-host value="" />
+          <proxy-port value="22" />
+          <proxy-user value="" />
+          <deprecated-proxy-pwd value="" />
+          <auth-type value="PASSWORD" />
+          <key-file value="" />
+          <key-passphrase value="" />
+        </ssh-settings>
+        <ssl-settings>
+          <active value="false" />
+          <certificate-authority-file value="" />
+          <client-certificate-file value="" />
+          <client-key-file value="" />
+        </ssl-settings>
+        <details>
+          <charset value="UTF-8" />
+          <session-management value="true" />
+          <ddl-file-binding value="true" />
+          <database-logging value="true" />
+          <connect-automatically value="true" />
+          <restore-workspace value="true" />
+          <restore-workspace-deep value="false" />
+          <environment-type value="default" />
+          <connectivity-timeout value="30" />
+          <idle-time-to-disconnect value="30" />
+          <idle-time-to-disconnect-pool value="5" />
+          <credential-expiry-time value="10" />
+          <max-connection-pool-size value="7" />
+          <alternative-statement-delimiter value="" />
+        </details>
+        <debugger>
+          <compile-dependencies value="true" />
+          <tcp-driver-tunneling value="false" />
+          <tcp-host-address value="" />
+          <tcp-port-from value="4000" />
+          <tcp-port-to value="4999" />
+          <debugger-type value="ASK" />
+        </debugger>
+        <object-filters hide-empty-schemas="false" hide-pseudo-columns="false" hide-audit-columns="false">
+          <object-filters />
+          <object-type-filter use-master-settings="true">
+            <object-type name="SCHEMA" enabled="true" />
+            <object-type name="USER" enabled="true" />
+            <object-type name="ROLE" enabled="true" />
+            <object-type name="PRIVILEGE" enabled="true" />
+            <object-type name="CHARSET" enabled="true" />
+            <object-type name="TABLE" enabled="true" />
+            <object-type name="VIEW" enabled="true" />
+            <object-type name="MATERIALIZED_VIEW" enabled="true" />
+            <object-type name="NESTED_TABLE" enabled="true" />
+            <object-type name="COLUMN" enabled="true" />
+            <object-type name="INDEX" enabled="true" />
+            <object-type name="CONSTRAINT" enabled="true" />
+            <object-type name="DATASET_TRIGGER" enabled="true" />
+            <object-type name="DATABASE_TRIGGER" enabled="true" />
+            <object-type name="SYNONYM" enabled="true" />
+            <object-type name="SEQUENCE" enabled="true" />
+            <object-type name="PROCEDURE" enabled="true" />
+            <object-type name="FUNCTION" enabled="true" />
+            <object-type name="PACKAGE" enabled="true" />
+            <object-type name="TYPE" enabled="true" />
+            <object-type name="TYPE_ATTRIBUTE" enabled="true" />
+            <object-type name="ARGUMENT" enabled="true" />
+            <object-type name="DIMENSION" enabled="true" />
+            <object-type name="CLUSTER" enabled="true" />
+            <object-type name="DBLINK" enabled="true" />
+          </object-type-filter>
+        </object-filters>
+      </connection>
+    </connections>
     <browser-settings>
       <general>
         <display-mode value="TABBED" />
@@ -405,5 +592,9 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
+    <execution-variable-types />
   </component>
 </project>

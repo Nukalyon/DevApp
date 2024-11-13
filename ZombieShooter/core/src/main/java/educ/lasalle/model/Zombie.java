@@ -1,12 +1,13 @@
-package educ.lasalle;
+package educ.lasalle.model;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import educ.lasalle.manager.AssetManager;
 
-public class Zombie implements IDisplayElement{
+public class Zombie implements IDisplayElement {
     private final Texture zombieTexture;
     private final Sprite zombieSprite;
     private final float zombieSize = 1f;

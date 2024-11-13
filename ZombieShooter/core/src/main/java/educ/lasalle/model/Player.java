@@ -1,10 +1,11 @@
-package educ.lasalle;
+package educ.lasalle.model;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import educ.lasalle.manager.AssetManager;
 
-public class Player implements IDisplayElement{
+public class Player implements IDisplayElement {
     private Texture playertexture;
     private Sprite playerSprite;
     private byte lifePoint;   //Value between -128 and 127
