@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
     static final int GAME_OVER = 4;
 
     ZombieShooter zombieShooter;
+
     FitViewport viewport;
     Music music;
     private Texture image;

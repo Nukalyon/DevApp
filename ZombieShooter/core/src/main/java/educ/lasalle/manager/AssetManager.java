@@ -15,4 +15,9 @@ public class AssetManager {
     public static Music loadMusic(String filename) {
         return Gdx.audio.newMusic(Gdx.files.internal(ASSET_SND_PATH + filename));
     }
+
+    public static void loadAllAssets()
+    {
+
+    }
 }
