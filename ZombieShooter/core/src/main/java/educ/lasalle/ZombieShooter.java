@@ -1,12 +1,10 @@
 package educ.lasalle;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.sun.tools.javac.Main;
 import educ.lasalle.manager.AssetManager;
-import educ.lasalle.ui.GameScreen;
 import educ.lasalle.ui.MainMenuScreen;
 
 public class ZombieShooter extends Game {

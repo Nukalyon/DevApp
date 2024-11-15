@@ -170,9 +170,6 @@ public class GameScreen implements Screen {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         ScreenUtils.clear(Color.BLACK);
-        Camera camera = viewport.getCamera();
-        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
-        camera.update();
         viewport.apply();
         zombieShooter.batch.setProjectionMatrix(viewport.getCamera().combined);
 
