@@ -37,9 +37,7 @@ public class GameScreen implements Screen {
     FitViewport viewport;
     Music music;
     private Texture image;
-    Texture background;
     Vector2 touchPos;
-    Player player;
     PlayerController playerController;
     ArrayList<ZombieController> zombieControllers;
     ArrayList<BulletController> bulletControllers;
@@ -49,15 +47,14 @@ public class GameScreen implements Screen {
     BitmapFont scoreFont;
     ScoreManager scoreManager;
 
-    public GameScreen(ZombieShooter zombieShooter) {
+    public GameScreen(ZombieShooter zombieShooter, FitViewport viewport) {
         this.zombieShooter = zombieShooter;
+        this.viewport = viewport;
     }
 
     @Override
     public void show() {
         state = GAME_READY;
-        viewport = new FitViewport(8, 5);
-        background = AssetManager.loadTexture("background.png");
         image = AssetManager.loadTexture("libgdx.png");
         music = AssetManager.loadMusic("background.mp3");
         initMusic(music);
@@ -126,13 +123,12 @@ public class GameScreen implements Screen {
         disposeArray(zombieControllers);
         disposeArray(bulletControllers);
         playerController = null;
-        background = null;
+        //background = null;
         scoreFont.dispose();
     }
 
     private void createPlayer() {
-        player = new Player();
-        playerController = new PlayerController(player, viewport);
+        playerController = new PlayerController(new Player(), viewport);
     }
 
     private void initMusic(Music music) {
@@ -182,7 +178,7 @@ public class GameScreen implements Screen {
 
         zombieShooter.batch.begin();
 
-        zombieShooter.batch.draw(background, 0, 0, worldWidth, worldHeight);
+        zombieShooter.batch.draw(AssetManager.background, 0, 0, worldWidth, worldHeight);
         playerController.getSprite().draw(zombieShooter.batch);
         scoreFont.draw(zombieShooter.batch, "Score: " + scoreManager.getScore(), 0, viewport.getWorldHeight());
         // Draw all zombies

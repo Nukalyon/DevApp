@@ -2,7 +2,9 @@ package educ.lasalle;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import educ.lasalle.ui.GameScreen;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import educ.lasalle.manager.AssetManager;
 import educ.lasalle.ui.MainMenuScreen;
 
 public class ZombieShooter extends Game {
@@ -13,11 +15,14 @@ public class ZombieShooter extends Game {
 
     // Used by all screens
     public SpriteBatch batch;
+    public FitViewport viewport;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        setScreen(new MainMenuScreen(this));
+        viewport = new FitViewport(ZombieShooter.SCREEN_WIDTH, ZombieShooter.SCREEN_HEIGHT);
+        AssetManager.loadAllAssets();
+        setScreen(new MainMenuScreen(this, viewport));
     }
 
     @Override
