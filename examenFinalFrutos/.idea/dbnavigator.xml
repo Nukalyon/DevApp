@@ -75,16 +75,31 @@ VALUES
     ('Le Petit Prince', 'Antoine de Saint-Exupéry', 1943),
     ('1984', 'George Orwell', 1949),
     ('La Peste', 'Albert Camus', 1947),
-    ('L Étranger', 'Albert Camus', 1942);]]></console>
+    ('L Étranger', 'Albert Camus', 1942);
+
+-- Abonné par son nom
+SELECT * FROM abonne WHERE nom='Dupont';
+-- Abonné par son id
+SELECT * FROM abonne WHERE idAbonne=1;
+-- Livre par sa disponibilité
+SELECT * FROM Livre WHERE disponible=TRUE;
+
+-- Afficher tous les emprunts en cours
+SELECT e.idEmprunt, l.titre, e.date_emprunt, e.date_retour FROM emprunt e
+    JOIN livre l ON e.idLivre = l.idLivre
+    WHERE e.idAbonne=1;
+   
+-- Modifications dans les tables
+UPDATE livre set disponible=TRUE where idLivre = 1;
+DELETE FROM abonne WHERE idAbonne=2; 
+DELETE FROM livre WHERE idLivre=2;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="82e86619-9c47-4049-881d-49d34e88fce5" object-ref="consoles/Connection" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="82e86619-9c47-4049-881d-49d34e88fce5" />

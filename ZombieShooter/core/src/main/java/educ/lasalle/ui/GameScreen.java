@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -33,10 +33,8 @@ public class GameScreen implements Screen {
     static final int GAME_OVER = 4;
 
     ZombieShooter zombieShooter;
-
     FitViewport viewport;
-    Music music;
-    private Texture image;
+
     Vector2 touchPos;
     PlayerController playerController;
     ArrayList<ZombieController> zombieControllers;
@@ -55,9 +53,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         state = GAME_READY;
-        image = AssetManager.loadTexture("libgdx.png");
-        music = AssetManager.loadMusic("background.mp3");
-        initMusic(music);
+        initMusic(AssetManager.music);
         touchPos = new Vector2();
 
         createPlayer();
@@ -86,7 +82,7 @@ public class GameScreen implements Screen {
                 draw();
                 break;
             case GAME_PAUSED:
-                music.stop();
+                AssetManager.music.stop();
                 displayPauseMenu();
                 //pause();
                 break;
@@ -118,17 +114,18 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        image.dispose();
-        music.dispose();
+        //image.dispose();
+        //music.dispose();
         disposeArray(zombieControllers);
         disposeArray(bulletControllers);
-        playerController = null;
+        //playerController = null;
         //background = null;
         scoreFont.dispose();
     }
 
     private void createPlayer() {
         playerController = new PlayerController(new Player(), viewport);
+        playerController.initRotation();
     }
 
     private void initMusic(Music music) {
@@ -147,7 +144,7 @@ public class GameScreen implements Screen {
             bci.update(delta);
 
             // if the top of the bullet goes beyond the top of the view, remove it
-            if (bci.getSprite().getY() < -1) {
+            if (bci.getSprite().getY() > ZombieShooter.SCREEN_HEIGHT) {
                 bulletControllers.remove(i);
             }
 
@@ -173,14 +170,21 @@ public class GameScreen implements Screen {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         ScreenUtils.clear(Color.BLACK);
+        Camera camera = viewport.getCamera();
+        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+        camera.update();
         viewport.apply();
         zombieShooter.batch.setProjectionMatrix(viewport.getCamera().combined);
 
         zombieShooter.batch.begin();
-
+        /*************** START DRAW *******************/
         zombieShooter.batch.draw(AssetManager.background, 0, 0, worldWidth, worldHeight);
-        playerController.getSprite().draw(zombieShooter.batch);
-        scoreFont.draw(zombieShooter.batch, "Score: " + scoreManager.getScore(), 0, viewport.getWorldHeight());
+        zombieShooter.batch.draw(playerController.getSprite(), playerController.getSprite().getX(), playerController.getSprite().getY(),
+            playerController.getSprite().getWidth(), playerController.getSprite().getHeight());
+
+        //playerController.getSprite().draw(zombieShooter.batch);
+        scoreFont.draw(zombieShooter.batch, "Score: " + scoreManager.getScore(), 0, worldHeight);
+
         // Draw all zombies
         for (ZombieController zbc : zombieControllers) {
             zbc.getSprite().draw(zombieShooter.batch);
@@ -190,7 +194,7 @@ public class GameScreen implements Screen {
         {
             btc.getSprite().draw(zombieShooter.batch);
         }
-
+        /*************** END DRAW *******************/
         zombieShooter.batch.end();
     }
 
@@ -256,6 +260,7 @@ public class GameScreen implements Screen {
         zombieController.initPosition();
 
         zombieControllers.add(zombieController);
+        //System.out.println("Zombie Count: " + zombieControllers.size());
     }
 
     private void createBullet(){
@@ -265,6 +270,7 @@ public class GameScreen implements Screen {
         bulletController.initPosition(playerController.getSprite());
 
         bulletControllers.add(bulletController);
+        //System.out.println("Bullet Count: " + bulletControllers.size());
     }
 
     private <T> void disposeArray(ArrayList<T> array) {

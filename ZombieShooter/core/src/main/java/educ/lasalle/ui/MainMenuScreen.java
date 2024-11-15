@@ -2,11 +2,8 @@ package educ.lasalle.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import educ.lasalle.ZombieShooter;
 import educ.lasalle.manager.AssetManager;
@@ -21,12 +18,7 @@ public class MainMenuScreen implements Screen {
     private static final int PLAY_Y = 100;
     private static final int EXIT_Y = 300;
 
-    Texture playButtonClicked;
-    Texture playButtonUnclicked;
     Rectangle playButton;
-
-    Texture exitButtonClicked;
-    Texture exitButtonUnclicked;
     Rectangle exitButton;
 
     Vector2 touchPos;
@@ -37,11 +29,7 @@ public class MainMenuScreen implements Screen {
 
         touchPos = new Vector2();
 
-        playButtonClicked = AssetManager.loadTexture("playClicked.png");
-        playButtonUnclicked = AssetManager.loadTexture("playUnclicked.png");
         playButton = new Rectangle(0,PLAY_Y,BTN_WIDTH,BTN_HEIGHT);
-        exitButtonClicked = AssetManager.loadTexture("quitClicked.png");
-        exitButtonUnclicked = AssetManager.loadTexture("quitUnclicked.png");
         exitButton = new Rectangle(0,EXIT_Y,BTN_WIDTH,BTN_HEIGHT);
     }
 
@@ -49,7 +37,6 @@ public class MainMenuScreen implements Screen {
     public void show() {
         playButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), PLAY_Y, BTN_WIDTH, BTN_HEIGHT);
         exitButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
-        //System.out.println(playButton.toString());
     }
 
     @Override
@@ -73,10 +60,10 @@ public class MainMenuScreen implements Screen {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY());
             if(playButton.contains(touchPos.x, touchPos.y))
             {
-                zombieShooter.batch.draw(playButtonClicked, x, PLAY_Y, BTN_WIDTH, BTN_HEIGHT);
+                zombieShooter.batch.draw(AssetManager.playButtonClicked, x, PLAY_Y, BTN_WIDTH, BTN_HEIGHT);
             }
             else  {
-                zombieShooter.batch.draw(playButtonUnclicked, x, PLAY_Y, BTN_WIDTH, BTN_HEIGHT);
+                zombieShooter.batch.draw(AssetManager.playButtonUnclicked, x, PLAY_Y, BTN_WIDTH, BTN_HEIGHT);
             }
         }
 

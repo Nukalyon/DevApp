@@ -1,24 +1,19 @@
 package educ.lasalle.model;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import educ.lasalle.manager.AssetManager;
 
 public class Player implements IDisplayElement {
-    private Texture playertexture;
     private Sprite playerSprite;
     private byte lifePoint;   //Value between -128 and 127
-    private final float playerSize = 1f;
     private Rectangle playerRectangle;
 
     public Player() {
         this.lifePoint = 100;
-        playertexture = AssetManager.loadTexture("player.png");
-        playerSprite = new Sprite(playertexture);
-        playerSprite.setSize(playerSize, playerSize);
-        playerSprite.rotate90(false);
-        playerRectangle = new Rectangle(playerSprite.getX(), playerSprite.getY(), playerSize, playerSize);
+        playerSprite = AssetManager.loadSprite(AssetManager.playertexture, new Vector2(AssetManager.playerSize,AssetManager.playerSize));
+        playerRectangle = new Rectangle(this.playerSprite.getX(), this.playerSprite.getY(), AssetManager.playerSize, AssetManager.playerSize);
     }
 
     public void receiveDamage(byte amount) {
@@ -45,7 +40,10 @@ public class Player implements IDisplayElement {
     }
 
     public float getSize(){
-        return this.playerSize;
+        return AssetManager.playerSize;
     }
 
+    public void initRotation() {
+        getSprite().rotate90(false);
+    }
 }
