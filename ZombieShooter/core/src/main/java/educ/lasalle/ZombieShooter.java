@@ -9,7 +9,6 @@ import educ.lasalle.ui.MainMenuScreen;
 
 public class ZombieShooter extends Game {
 
-    // ref : https://www.youtube.com/watch?v=b_fKQkwbuqA
     public static final int SCREEN_WIDTH = 640;
     public static final int SCREEN_HEIGHT = 480;
 

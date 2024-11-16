@@ -2,6 +2,7 @@ package educ.lasalle.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -18,8 +19,8 @@ public class MainMenuScreen implements Screen {
     private static final int PLAY_Y = 310;
     private static final int EXIT_Y = 190;
 
-    Rectangle playButton;
-    Rectangle exitButton;
+    private Rectangle playButton;
+    private Rectangle exitButton;
 
     Vector2 touchPos;
 
@@ -41,7 +42,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        viewport.apply();
+        //viewport.apply();
         update();
         draw();
     }
@@ -59,9 +60,12 @@ public class MainMenuScreen implements Screen {
     private void update() {
         if (Gdx.input.justTouched()) {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-            System.out.println("touchPos " + touchPos);
+            // Y axis inverted
+            touchPos.y -= ZombieShooter.SCREEN_HEIGHT;
+            touchPos.y = (touchPos.y < 0 ? touchPos.y * (-1) : touchPos.y);
+
             if (playButton.contains(touchPos.x, touchPos.y)) {
-                zombieShooter.setScreen(new GameScreen(zombieShooter, viewport)); // Assuming you have a GameScreen
+                zombieShooter.setScreen(new GameScreen(zombieShooter, viewport));
             }
             if (exitButton.contains(touchPos.x, touchPos.y)) {
                 // Exit the application

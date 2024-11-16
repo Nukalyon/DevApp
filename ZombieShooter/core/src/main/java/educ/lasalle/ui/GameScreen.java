@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -26,14 +26,20 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
-    static final int GAME_READY = 0;
-    static final int GAME_RUNNING = 1;
-    static final int GAME_PAUSED = 2;
-    static final int GAME_LEVEL_END = 3;
-    static final int GAME_OVER = 4;
+    static final int GAME_RUNNING = 0;
+    static final int GAME_PAUSED = 1;
+    static final int GAME_OVER = 2;
 
     ZombieShooter zombieShooter;
     FitViewport viewport;
+
+    private static final int BTN_WIDTH = 150;
+    private static final int BTN_HEIGHT = 75;
+    private static final int RESUME_Y = 310;
+    private static final int EXIT_Y = 190;
+
+    private Rectangle resumeButton;
+    private Rectangle exitButton;
 
     Vector2 touchPos;
     PlayerController playerController;
@@ -48,12 +54,14 @@ public class GameScreen implements Screen {
     public GameScreen(ZombieShooter zombieShooter, FitViewport viewport) {
         this.zombieShooter = zombieShooter;
         this.viewport = viewport;
+
+        resumeButton = new Rectangle(0,RESUME_Y,BTN_WIDTH,BTN_HEIGHT);
+        exitButton = new Rectangle(0,EXIT_Y,BTN_WIDTH,BTN_HEIGHT);
     }
 
     @Override
     public void show() {
-        state = GAME_READY;
-        initMusic(AssetManager.music);
+        state = GAME_RUNNING;
         touchPos = new Vector2();
 
         createPlayer();
@@ -63,33 +71,55 @@ public class GameScreen implements Screen {
         createBullet();
 
         scoreFont = new BitmapFont();
-        scoreFont.setColor(Color.WHITE);
-        scoreFont.setUseIntegerPositions(false);
-        scoreFont.getData().setScale(0.015f);
-        scoreManager = new ScoreManager();
+        initScore(scoreFont);
 
+        // Pour le menu pause
+        //pauseButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
+        resumeButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
+        //System.out.println("Resume button : " + resumeButton);
+        exitButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
+        //System.out.println("Exit button : " + resumeButton);
     }
 
     @Override
     public void render(float delta) {
+        draw();
+        update(delta);
+    }
+
+    private void update(float delta) {
+        if (delta > 0.1f) delta = 0.1f;
         switch (state)
         {
-            case GAME_READY:
-                //resume();
-                input();
-                logicBullet();
-                logicZombie();
-                draw();
+            case GAME_RUNNING:
+                updateRunning(delta);
                 break;
             case GAME_PAUSED:
-                AssetManager.music.stop();
-                displayPauseMenu();
-                //pause();
+                updatePaused();
+                break;
+            case GAME_OVER:
+                updateOver();
                 break;
             default:
                 break;
         }
+    }
 
+    private void updateRunning(float delta) {
+        AssetManager.playSound();
+        input(delta);
+        logicBullet(delta);
+        logicZombie(delta);
+    }
+
+    private void updatePaused() {
+        AssetManager.stopSound();
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            state = GAME_RUNNING;
+        }
+    }
+
+    private void updateOver() {
     }
 
     @Override
@@ -99,7 +129,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        if (state == GAME_RUNNING) state = GAME_PAUSED;
     }
 
     @Override
@@ -114,12 +144,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        //image.dispose();
-        //music.dispose();
         disposeArray(zombieControllers);
         disposeArray(bulletControllers);
-        //playerController = null;
-        //background = null;
         scoreFont.dispose();
     }
 
@@ -128,22 +154,21 @@ public class GameScreen implements Screen {
         playerController.initRotation();
     }
 
-    private void initMusic(Music music) {
-        music.setLooping(true);
-        music.setVolume(.05f);
-        music.play();
+    private void initScore(BitmapFont scoreFont) {
+        scoreFont.setColor(Color.WHITE);
+        scoreFont.setUseIntegerPositions(false);
+        scoreFont.getData().setScale(0.015f);
+        scoreManager = new ScoreManager();
     }
 
-    private void logicBullet() {
-        // retrieve the current delta
-        float delta = Gdx.graphics.getDeltaTime();
+    private void logicBullet(float delta) {
         //Déplacement des balles
         for (int i = bulletControllers.size() - 1; i >= 0; i--) {
 
             BulletController bci = bulletControllers.get(i);
             bci.update(delta);
 
-            // if the top of the bullet goes beyond the top of the view, remove it
+            // TODO, check bullet going off screen
             if (bci.getSprite().getY() > ZombieShooter.SCREEN_HEIGHT) {
                 bulletControllers.remove(i);
             }
@@ -167,19 +192,52 @@ public class GameScreen implements Screen {
     }
 
     private void draw() {
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
+        viewport.getCamera().update();
         zombieShooter.batch.setProjectionMatrix(viewport.getCamera().combined);
 
+        //zombieShooter.batch.disableBlending();
+        zombieShooter.batch.enableBlending();
         zombieShooter.batch.begin();
         /*************** START DRAW *******************/
-        zombieShooter.batch.draw(AssetManager.background, 0, 0, worldWidth, worldHeight);
-        zombieShooter.batch.draw(playerController.getSprite(), playerController.getSprite().getX(), playerController.getSprite().getY(),
-            playerController.getSprite().getWidth(), playerController.getSprite().getHeight());
+        switch(state)
+        {
+            case GAME_RUNNING:
+                drawRunning();
+                break;
+            case GAME_PAUSED:
+                ScreenUtils.clear(Color.NAVY);
+                drawPaused();
+                break;
+            case GAME_OVER:
+                break;
+            default:
+                break;
+        }
+        /*************** END DRAW *******************/
+        zombieShooter.batch.end();
+    }
 
-        //playerController.getSprite().draw(zombieShooter.batch);
+    private void drawPaused() {
+        // TODO: Doesn't draw, flush batch ?
+        scoreFont.draw(zombieShooter.batch, "Score: " + scoreManager.getScore(), 0, viewport.getWorldHeight());
+        zombieShooter.batch.draw(AssetManager.resumeButtonUnclicked, resumeButton.getX(), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
+        zombieShooter.batch.draw(AssetManager.exitButtonUnclicked, exitButton.getX(), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
+    }
+
+    private void drawRunning() {
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+        zombieShooter.batch.draw(AssetManager.background, 0, 0, worldWidth, worldHeight);
+        zombieShooter.batch.draw(
+            playerController.getSprite(),
+            playerController.getSprite().getX(),
+            playerController.getSprite().getY(),
+            playerController.getSprite().getWidth(),
+            playerController.getSprite().getHeight()
+        );
+
         scoreFont.draw(zombieShooter.batch, "Score: " + scoreManager.getScore(), 0, worldHeight);
 
         // Draw all zombies
@@ -191,12 +249,9 @@ public class GameScreen implements Screen {
         {
             btc.getSprite().draw(zombieShooter.batch);
         }
-        /*************** END DRAW *******************/
-        zombieShooter.batch.end();
     }
 
-    private void input() {
-        float delta = Gdx.graphics.getDeltaTime();
+    private void input(float delta) {
         float speed = 7f;
         Sprite playerSprite = playerController.getSprite();
 
@@ -215,18 +270,11 @@ public class GameScreen implements Screen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            // open pause menu
-            state = (state == GAME_PAUSED ? GAME_RUNNING : GAME_PAUSED);
+            state = GAME_PAUSED;
         }
     }
 
-    private void displayPauseMenu() {
-
-    }
-
-    private void logicZombie() {
-        // retrieve the current delta
-        float delta = Gdx.graphics.getDeltaTime();
+    private void logicZombie(float delta) {
         playerController.update();
 
         //Déplacement des zombies

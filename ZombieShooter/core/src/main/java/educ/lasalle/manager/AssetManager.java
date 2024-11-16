@@ -11,14 +11,13 @@ public class AssetManager {
     private static final String ASSET_SND_PATH = System.getProperty("user.dir") +"\\assets\\sounds\\";
 
     // Ramener toutes les Texture, Sound, Music, Animation ici en public static
-    // Les Texture Sprite seront dans leurs classes
+    // Les Sprite seront dans leurs classes
     public static Texture background;
     public static Texture image;
 
-    public static Texture playButtonClicked;
     public static Texture playButtonUnclicked;
-    public static Texture exitButtonClicked;
     public static Texture exitButtonUnclicked;
+    public static Texture resumeButtonUnclicked;
 
     public static Texture bulletTexture;
     public static final float bulletSize = .35f;
@@ -30,6 +29,7 @@ public class AssetManager {
     public static final float playerSize = 1f;
 
     public static Music music;
+    public static float timestampMusic;
 
 
     public static Texture loadTexture(String filename){
@@ -50,10 +50,9 @@ public class AssetManager {
     {
         background = loadTexture("background.png");
         image = loadTexture("libgdx.png");
-        playButtonClicked = loadTexture("playClicked.png");
         playButtonUnclicked = loadTexture("playUnclicked.png");
-        exitButtonClicked = loadTexture("quitClicked.png");
         exitButtonUnclicked = loadTexture("quitUnclicked.png");
+        resumeButtonUnclicked = loadTexture("resume.png");
 
         zombieTexture = loadTexture("zombie.png");
         bulletTexture = loadTexture("bullet.png");
@@ -61,5 +60,21 @@ public class AssetManager {
         playertexture = loadTexture("player.png");
 
         music = loadMusic("background.mp3");
+        music.setLooping(true);
+        music.setVolume(.05f);
+    }
+
+    public static void playSound() {
+        if(!music.isPlaying()) {
+            music.setPosition(timestampMusic);
+            music.play();
+        }
+    }
+    public static void stopSound()
+    {
+        if(music.isPlaying()) {
+            timestampMusic = music.getPosition();
+            music.stop();
+        }
     }
 }
