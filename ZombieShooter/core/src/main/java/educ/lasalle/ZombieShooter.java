@@ -4,7 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.sun.tools.javac.Main;
 import educ.lasalle.manager.AssetManager;
+import educ.lasalle.ui.LoginScreen;
 import educ.lasalle.ui.MainMenuScreen;
 
 public class ZombieShooter extends Game {
@@ -19,9 +21,9 @@ public class ZombieShooter extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new FitViewport(10, 7);
+        viewport = new FitViewport(640, 480);
         AssetManager.loadAllAssets();
-        setScreen(new MainMenuScreen(this, viewport));
+        setScreen(new LoginScreen(this, viewport));
     }
 
     @Override

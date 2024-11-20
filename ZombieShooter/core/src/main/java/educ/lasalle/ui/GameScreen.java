@@ -34,10 +34,10 @@ public class GameScreen implements Screen {
     ZombieShooter zombieShooter;
     FitViewport viewport;
 
-    private static final float BTN_WIDTH = 2f;
-    private static final float BTN_HEIGHT = 1f;
-    private static final float RESUME_Y = 3.10f;
-    private static final float EXIT_Y = 1.90f;
+    private static final float BTN_WIDTH = 200f;
+    private static final float BTN_HEIGHT = 100f;
+    private static final float RESUME_Y = 310f;
+    private static final float EXIT_Y = 190f;
 
     private Rectangle resumeButton;
     private Rectangle exitButton;
@@ -74,8 +74,8 @@ public class GameScreen implements Screen {
         initScore(scoreFont);
 
         // Pour le menu pause
-        resumeButton.set((10 / 2) - (BTN_WIDTH / 2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
-        exitButton.set((10 / 2) - (BTN_WIDTH / 2), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
+        resumeButton.set(viewport.getWorldWidth() / 2 - (BTN_WIDTH / 2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
+        exitButton.set(viewport.getWorldWidth() / 2 - (BTN_WIDTH / 2), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class GameScreen implements Screen {
     }
 
     private void draw() {
-        viewport.apply();
+        //viewport.apply();
         zombieShooter.batch.setProjectionMatrix(viewport.getCamera().combined);
 
         zombieShooter.batch.begin();
@@ -244,8 +244,8 @@ public class GameScreen implements Screen {
         zombieShooter.batch.draw(AssetManager.background, 0, 0, worldWidth, worldHeight);
         zombieShooter.batch.draw(
             playerController.getSprite(),
-            playerController.getSprite().getX(),
-            playerController.getSprite().getY(),
+            playerController.getSprite().getOriginX(),
+            playerController.getSprite().getOriginY(),
             playerController.getSprite().getWidth(),
             playerController.getSprite().getHeight()
         );
