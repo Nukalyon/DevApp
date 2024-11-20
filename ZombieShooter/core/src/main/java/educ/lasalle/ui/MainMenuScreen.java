@@ -2,7 +2,6 @@ package educ.lasalle.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,7 +41,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //viewport.apply();
         update();
         draw();
     }
@@ -76,7 +74,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width,height);
+        viewport.update(width,height, true);
     }
 
     private void updatePlay() {

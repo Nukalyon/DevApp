@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -33,10 +34,10 @@ public class GameScreen implements Screen {
     ZombieShooter zombieShooter;
     FitViewport viewport;
 
-    private static final int BTN_WIDTH = 150;
-    private static final int BTN_HEIGHT = 75;
-    private static final int RESUME_Y = 310;
-    private static final int EXIT_Y = 190;
+    private static final float BTN_WIDTH = 2f;
+    private static final float BTN_HEIGHT = 1f;
+    private static final float RESUME_Y = 3.10f;
+    private static final float EXIT_Y = 1.90f;
 
     private Rectangle resumeButton;
     private Rectangle exitButton;
@@ -47,6 +48,7 @@ public class GameScreen implements Screen {
     ArrayList<BulletController> bulletControllers;
     float dropTimer;
     int state;
+    private boolean isEscapePressed = false;
 
     BitmapFont scoreFont;
     ScoreManager scoreManager;
@@ -54,16 +56,14 @@ public class GameScreen implements Screen {
     public GameScreen(ZombieShooter zombieShooter, FitViewport viewport) {
         this.zombieShooter = zombieShooter;
         this.viewport = viewport;
-
+        touchPos = new Vector2();
+        state = GAME_RUNNING;
         resumeButton = new Rectangle(0,RESUME_Y,BTN_WIDTH,BTN_HEIGHT);
         exitButton = new Rectangle(0,EXIT_Y,BTN_WIDTH,BTN_HEIGHT);
     }
 
     @Override
     public void show() {
-        state = GAME_RUNNING;
-        touchPos = new Vector2();
-
         createPlayer();
         zombieControllers = new ArrayList<>();
         createZombie();
@@ -74,17 +74,16 @@ public class GameScreen implements Screen {
         initScore(scoreFont);
 
         // Pour le menu pause
-        //pauseButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
-        resumeButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
-        //System.out.println("Resume button : " + resumeButton);
-        exitButton.set(((float) ZombieShooter.SCREEN_WIDTH /2) - ((float) BTN_WIDTH /2), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
-        //System.out.println("Exit button : " + resumeButton);
+        resumeButton.set((10 / 2) - (BTN_WIDTH / 2), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
+        exitButton.set((10 / 2) - (BTN_WIDTH / 2), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         draw();
         update(delta);
+        CooldownManager.updateCooldownEscape(delta);
     }
 
     private void update(float delta) {
@@ -98,7 +97,6 @@ public class GameScreen implements Screen {
                 updatePaused();
                 break;
             case GAME_OVER:
-                updateOver();
                 break;
             default:
                 break;
@@ -106,20 +104,34 @@ public class GameScreen implements Screen {
     }
 
     private void updateRunning(float delta) {
-        AssetManager.playSound();
-        input(delta);
-        logicBullet(delta);
-        logicZombie(delta);
+        if (state == GAME_RUNNING) {
+            AssetManager.playSound();
+            input(delta);
+            logicBullet(delta);
+            logicZombie(delta);
+        }
     }
 
     private void updatePaused() {
         AssetManager.stopSound();
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            state = GAME_RUNNING;
+            state = GAME_RUNNING;  // Reprendre le jeu
         }
-    }
 
-    private void updateOver() {
+        // Check if the user clicks on the Resume or Exit buttons
+        if (Gdx.input.isTouched()) {
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+            viewport.unproject(touchPos);
+            System.out.println(touchPos);
+
+            if (resumeButton.contains(touchPos)) {
+                state = GAME_RUNNING;
+            }
+
+            if (exitButton.contains(touchPos)) {
+                Gdx.app.exit();
+            }
+        }
     }
 
     @Override
@@ -192,36 +204,36 @@ public class GameScreen implements Screen {
     }
 
     private void draw() {
-        ScreenUtils.clear(Color.BLACK);
         viewport.apply();
-        viewport.getCamera().update();
         zombieShooter.batch.setProjectionMatrix(viewport.getCamera().combined);
 
-        //zombieShooter.batch.disableBlending();
-        zombieShooter.batch.enableBlending();
         zombieShooter.batch.begin();
-        /*************** START DRAW *******************/
-        switch(state)
-        {
+        switch(state) {
             case GAME_RUNNING:
                 drawRunning();
                 break;
             case GAME_PAUSED:
-                ScreenUtils.clear(Color.NAVY);
                 drawPaused();
                 break;
             case GAME_OVER:
+                drawGameOver();
                 break;
             default:
                 break;
         }
-        /*************** END DRAW *******************/
         zombieShooter.batch.end();
     }
 
+    private void drawGameOver() {
+        //Change to GameOverScreen
+    }
+
+
     private void drawPaused() {
-        // TODO: Doesn't draw, flush batch ?
+        zombieShooter.batch.draw(AssetManager.background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         scoreFont.draw(zombieShooter.batch, "Score: " + scoreManager.getScore(), 0, viewport.getWorldHeight());
+
+        // Draw the Resume and Exit buttons
         zombieShooter.batch.draw(AssetManager.resumeButtonUnclicked, resumeButton.getX(), RESUME_Y, BTN_WIDTH, BTN_HEIGHT);
         zombieShooter.batch.draw(AssetManager.exitButtonUnclicked, exitButton.getX(), EXIT_Y, BTN_WIDTH, BTN_HEIGHT);
     }
@@ -255,24 +267,39 @@ public class GameScreen implements Screen {
         float speed = 7f;
         Sprite playerSprite = playerController.getSprite();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            playerSprite.translateX(speed * delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            playerSprite.translateX(-speed * delta); // Move the bucket left
-        }
+        if (state == GAME_RUNNING) {
+            // Move player when the game is running
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                playerSprite.translateX(speed * delta);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                playerSprite.translateX(-speed * delta); // Move player to the left
+            }
 
-        // If the user has clicked or tapped the screen
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-            viewport.unproject(touchPos);
-            playerSprite.setCenterX(touchPos.x);
-        }
+            // If the user presses Escape, pause the game
+            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                //CooldownManager.tryPressEscape();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            state = GAME_PAUSED;
+                if (CooldownManager.canPressEscape()) {
+                    if (state == GAME_RUNNING) {
+                        state = GAME_PAUSED;
+                    } else if (state == GAME_PAUSED) {
+                        state = GAME_RUNNING;
+                    }
+                }
+            }
+
+            // If the user touches the screen, move the player to the touch position
+            if (Gdx.input.isTouched()) {
+                touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+                viewport.unproject(touchPos);
+                playerSprite.setCenterX(touchPos.x);
+            }
         }
     }
+
+
+
 
     private void logicZombie(float delta) {
         playerController.update();
