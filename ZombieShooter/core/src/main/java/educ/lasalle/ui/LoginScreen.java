@@ -90,8 +90,11 @@ public class LoginScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 String username = txtFieldLogin.getText();
                 String password = txtFieldPassword.getText();
-                UserManager.authenticateUser(username,password);
-                System.out.println("username: " + username + " ; password: " + password);
+                if(UserManager.authenticateUser(username,password))
+                {
+                    zombieShooter.setScreen(new GameScreen(zombieShooter, viewport));
+                }
+
             }
         });
 
@@ -107,7 +110,6 @@ public class LoginScreen implements Screen {
                 String username = txtFieldLogin.getText();
                 String password = txtFieldPassword.getText();
                 UserManager.registerUser(username,password);
-                System.out.println("username: " + username + " ; password: " + password);
             }
         });
 
