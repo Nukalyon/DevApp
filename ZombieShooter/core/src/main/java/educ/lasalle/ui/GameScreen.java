@@ -298,9 +298,6 @@ public class GameScreen implements Screen {
         }
     }
 
-
-
-
     private void logicZombie(float delta) {
         playerController.update();
 

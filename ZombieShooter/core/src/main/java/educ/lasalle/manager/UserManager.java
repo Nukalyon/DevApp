@@ -6,7 +6,7 @@ public class UserManager {
     public static Connection getConnection() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/game_user", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/game_user", "root", ""); //TODO: ERROR
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -15,7 +15,7 @@ public class UserManager {
     public static boolean authenticateUser(String username, String password){
         boolean isAuthenticated = false;
 
-        String query = "SELECT * FROM dbuser WHERE username = ? AND password = ?";
+        String query = "SELECT * FROM user WHERE username = ? AND password = ?";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
@@ -24,9 +24,8 @@ public class UserManager {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Vérifiez si un enregistrement correspondant a été trouvé
             if (resultSet.next()) {
-                isAuthenticated = true; // L'utilisateur a été authentifié
+                isAuthenticated = true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -36,7 +35,7 @@ public class UserManager {
     }
     public static void registerUser(String username, String password){
         String query = "INSERT INTO user (username, password) VALUES (?, ?)";
-        if (!username.isEmpty() || !password.isEmpty()){
+        if (!username.isEmpty() && !password.isEmpty()){
             try (Connection connection = getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
