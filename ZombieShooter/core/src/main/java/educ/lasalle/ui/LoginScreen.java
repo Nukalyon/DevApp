@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import educ.lasalle.ZombieShooter;
 import educ.lasalle.manager.AssetManager;
+import educ.lasalle.manager.UserManager;
 
 import java.awt.event.KeyListener;
 
@@ -37,6 +38,7 @@ public class LoginScreen implements Screen {
     private TextField txtFieldLogin;
     private TextField txtFieldPassword;
     private TextButton btnConnect;
+    private TextButton btnRegister;
 
     public LoginScreen(ZombieShooter zombieShooter, FitViewport viewport) {
         stage = new Stage(viewport);
@@ -56,6 +58,7 @@ public class LoginScreen implements Screen {
 
         // https://stackoverflow.com/questions/21488311/how-to-create-a-button-in-libgdx
         btnConnect = new TextButton("Connect", glassy, "default");
+        btnRegister = new TextButton("Register", glassy, "default");
     }
 
     @Override
@@ -87,7 +90,7 @@ public class LoginScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 String username = txtFieldLogin.getText();
                 String password = txtFieldPassword.getText();
-                //Authentification in DB here
+                UserManager.authenticateUser(username,password);
                 System.out.println("username: " + username + " ; password: " + password);
             }
         });
@@ -96,6 +99,22 @@ public class LoginScreen implements Screen {
         btnConnect.setSize(250, btnConnect.getPrefHeight());
         btnConnect.setPosition(stage.getWidth() / 2 , spaceTopAndBot - SPACE_BETWEEN - btnConnect.getPrefHeight());
         stage.addActor(btnConnect);
+
+        btnRegister.addListener(new ClickListener() {
+            //Handle connection
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String username = txtFieldLogin.getText();
+                String password = txtFieldPassword.getText();
+                UserManager.registerUser(username,password);
+                System.out.println("username: " + username + " ; password: " + password);
+            }
+        });
+
+        btnRegister.getStyle().font.getData().setScale(0.5f);
+        btnRegister.setSize(250, btnRegister.getPrefHeight());
+        btnRegister.setPosition(stage.getWidth() / 2 , 175);
+        stage.addActor(btnRegister);
     }
 
     @Override
