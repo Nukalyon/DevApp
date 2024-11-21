@@ -20,13 +20,13 @@ public class AssetManager {
     public static Texture resumeButtonUnclicked;
 
     public static Texture bulletTexture;
-    public static final float bulletSize = .35f;
+    public static final float bulletSize = 35f;
 
     public static Texture zombieTexture;
-    public static final  float zombieSize = 1f;
+    public static final  float zombieSize = 100f;
 
     public static Texture playertexture;
-    public static final float playerSize = 1f;
+    public static final float playerSize = 100f;
 
     public static Music music;
     public static float timestampMusic;

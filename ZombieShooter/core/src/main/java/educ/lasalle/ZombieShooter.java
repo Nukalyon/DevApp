@@ -11,8 +11,8 @@ import educ.lasalle.ui.MainMenuScreen;
 
 public class ZombieShooter extends Game {
 
-    public static final int SCREEN_WIDTH = 640;
-    public static final int SCREEN_HEIGHT = 480;
+    public static final int SCREEN_WIDTH = 1440;
+    public static final int SCREEN_HEIGHT = 900;
 
     // Used by all screens
     public SpriteBatch batch;
@@ -21,9 +21,9 @@ public class ZombieShooter extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new FitViewport(640, 480);
+        viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
         AssetManager.loadAllAssets();
-        setScreen(new LoginScreen(this, viewport));
+        setScreen(new MainMenuScreen(this, viewport));
     }
 
     @Override

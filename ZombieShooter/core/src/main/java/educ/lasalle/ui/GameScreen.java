@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -81,6 +82,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        viewport.apply();
+
         draw();
         update(delta);
         CooldownManager.updateCooldownEscape(delta);
@@ -122,7 +125,6 @@ public class GameScreen implements Screen {
         if (Gdx.input.isTouched()) {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY());
             viewport.unproject(touchPos);
-            System.out.println(touchPos);
 
             if (resumeButton.contains(touchPos)) {
                 state = GAME_RUNNING;
@@ -169,7 +171,7 @@ public class GameScreen implements Screen {
     private void initScore(BitmapFont scoreFont) {
         scoreFont.setColor(Color.WHITE);
         scoreFont.setUseIntegerPositions(false);
-        scoreFont.getData().setScale(0.015f);
+        scoreFont.getData().setScale(1.5f);
         scoreManager = new ScoreManager();
     }
 
@@ -183,6 +185,7 @@ public class GameScreen implements Screen {
             // TODO, check bullet going off screen
             if (bci.getSprite().getY() > ZombieShooter.SCREEN_HEIGHT) {
                 bulletControllers.remove(i);
+                continue;
             }
 
             // Check collision with zombie
@@ -244,8 +247,8 @@ public class GameScreen implements Screen {
         zombieShooter.batch.draw(AssetManager.background, 0, 0, worldWidth, worldHeight);
         zombieShooter.batch.draw(
             playerController.getSprite(),
-            playerController.getSprite().getOriginX(),
-            playerController.getSprite().getOriginY(),
+            playerController.getSprite().getX(),
+            playerController.getSprite().getY(),
             playerController.getSprite().getWidth(),
             playerController.getSprite().getHeight()
         );
@@ -332,7 +335,6 @@ public class GameScreen implements Screen {
         zombieController.initPosition();
 
         zombieControllers.add(zombieController);
-        //System.out.println("Zombie Count: " + zombieControllers.size());
     }
 
     private void createBullet(){
@@ -342,7 +344,6 @@ public class GameScreen implements Screen {
         bulletController.initPosition(playerController.getSprite());
 
         bulletControllers.add(bulletController);
-        //System.out.println("Bullet Count: " + bulletControllers.size());
     }
 
     private <T> void disposeArray(ArrayList<T> array) {

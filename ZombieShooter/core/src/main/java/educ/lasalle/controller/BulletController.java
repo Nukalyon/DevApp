@@ -38,7 +38,7 @@ public class BulletController {
     {
         Sprite sp = this.getSprite();
         float size = this.getSize();
-        sp.translateY(2f * delta);
+        sp.translateY(200f * delta);
         this.getBox().set(sp.getX(), sp.getY(), size, size);
     }
 }
