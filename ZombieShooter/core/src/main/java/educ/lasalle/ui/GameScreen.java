@@ -226,6 +226,7 @@ public class GameScreen implements Screen {
 
     private void drawGameOver() {
         //Change to GameOverScreen
+        //Serialize score
     }
 
 

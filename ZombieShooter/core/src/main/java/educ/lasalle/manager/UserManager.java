@@ -30,13 +30,14 @@ public class UserManager {
         return isAuthenticated;
     }
     public static void registerUser(String username, String password){
-        String query = "INSERT INTO user (username, password) VALUES (?, ?)";
+        String query = "INSERT INTO user (username, password, score) VALUES (?, ?, ?)";
         if (!username.isEmpty() && !password.isEmpty()){
             try (Connection connection = DatabaseManager.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
+                preparedStatement.setInt(3, 0);
                 if(preparedStatement.executeUpdate() == 1)
                 {
                     System.out.println("Insertion successfully !");
