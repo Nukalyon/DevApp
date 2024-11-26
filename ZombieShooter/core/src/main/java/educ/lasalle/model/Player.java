@@ -11,7 +11,7 @@ public class Player implements IDisplayElement {
     private Rectangle playerRectangle;
 
     public Player() {
-        this.lifePoint = 100;
+        this.lifePoint = 40;
         playerSprite = AssetManager.loadSprite(AssetManager.playertexture, new Vector2(AssetManager.playerSize,AssetManager.playerSize));
         playerRectangle = new Rectangle(this.playerSprite.getX(), this.playerSprite.getY(), AssetManager.playerSize, AssetManager.playerSize);
     }

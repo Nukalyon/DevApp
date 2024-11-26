@@ -46,7 +46,6 @@ public class GameScreen implements Screen {
     ArrayList<BulletController> bulletControllers;
     float dropTimer;
     int state;
-    private boolean isEscapePressed = false;
 
     BitmapFont scoreFont;
     ScoreManager scoreManager;
@@ -189,7 +188,6 @@ public class GameScreen implements Screen {
             BulletController bci = bulletControllers.get(i);
             bci.update(delta);
 
-            // TODO, check bullet going off screen
             if (bci.getSprite().getY() > ZombieShooter.SCREEN_HEIGHT) {
                 bulletControllers.remove(i);
                 continue;

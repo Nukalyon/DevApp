@@ -70,7 +70,7 @@ public class AssetManager {
 
         music = loadMusic("background.mp3");
         music.setLooping(true);
-        music.setVolume(.05f);
+        music.setVolume(.025f);
 
         glassy = loadSkin("glassy","glassy-ui.json");
     }
