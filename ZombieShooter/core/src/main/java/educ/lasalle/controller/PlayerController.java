@@ -43,9 +43,15 @@ public class PlayerController {
 
     public void receiveDamage(byte damage) {
         this.player.receiveDamage(damage);
+
     }
 
     public void initRotation() {
         this.player.initRotation();
+    }
+
+    public boolean isDead()
+    {
+        return this.player.isDead();
     }
 }

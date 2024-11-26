@@ -97,10 +97,16 @@ public class GameScreen implements Screen {
                 updatePaused();
                 break;
             case GAME_OVER:
+                updateGameOver();
                 break;
             default:
                 break;
         }
+    }
+
+    private void updateGameOver() {
+        AssetManager.stopSound();
+        zombieShooter.setScreen(new GameOverScreen(zombieShooter, viewport, scoreManager));
     }
 
     private void updateRunning(float delta) {
@@ -109,6 +115,10 @@ public class GameScreen implements Screen {
             input(delta);
             logicBullet(delta);
             logicZombie(delta);
+            if(playerController.isDead())
+            {
+                state = GAME_OVER;
+            }
         }
     }
 
@@ -308,9 +318,10 @@ public class GameScreen implements Screen {
             ZombieController zci = zombieControllers.get(i);
             zci.update(delta);
 
-            // if the top of the zombie goes below the bottom of the view, remove it
+            // if the top of the zombie goes below the bottom of the view, remove it and inflict damages
             if (zci.getSprite().getY() < -1) {
                 zombieControllers.remove(i);
+                zci.inflictDamage(playerController);
             } else if (zci.checkCollision(playerController)) {
                 zci.inflictDamage(playerController);
                 zombieControllers.remove(i);

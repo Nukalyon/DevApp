@@ -3,10 +3,7 @@ package educ.lasalle.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -14,8 +11,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import educ.lasalle.ZombieShooter;
 import educ.lasalle.manager.AssetManager;
 import educ.lasalle.manager.UserManager;
-
-import java.awt.event.KeyListener;
 
 
 //https://libgdxinfo.wordpress.com/basic-label/
@@ -26,7 +21,6 @@ public class LoginScreen implements Screen {
     private final int SPACE_BETWEEN = 20;
     //Pixels to center the elements
     private int spaceTopAndBot;
-    private int spaceCenterToStartButton;
 
     private Stage stage;
     private final ZombieShooter zombieShooter;
@@ -41,7 +35,7 @@ public class LoginScreen implements Screen {
     private TextButton btnRegister;
 
     public LoginScreen(ZombieShooter zombieShooter, FitViewport viewport) {
-        stage = new Stage(viewport);
+        this.stage = new Stage(viewport);
         this.zombieShooter = zombieShooter;
         this.viewport = viewport;
         Gdx.input.setInputProcessor(stage);
@@ -129,7 +123,7 @@ public class LoginScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        //viewport.update(width, height, true);
         stage.getViewport().update(width, height, true);
     }
 
